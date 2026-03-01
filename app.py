@@ -53,10 +53,10 @@ with tabs[0]:
     st.latex(r"4 \times 4 - 5 \times 3")
     st.latex(r"5 \times 5 - 6 \times 4")
     
-    st.markdown("1. Your classmate said that each of the four expressions in Box 1 is equivalent to 1. Verify what your classmate said by showing your computation for the number expression $4 \times 4 - 5 \times 3$.")
+    st.markdown("1. Your classmate said that each of the four expressions in Box 1 is equivalent to 1. Verify what your classmate said by showing your computation for the number expression $4 \\times 4 - 5 \\times 3$.")
     st.text_area("Your computation for Item 1:", key="q1")
     
-    st.markdown("2. What must be the next number expression to $5 \times 5 - 6 \times 4$ in Box 1?")
+    st.markdown("2. What must be the next number expression to $5 \\times 5 - 6 \\times 4$ in Box 1?")
     st.text_input("Answer for Item 2:", key="q2")
     
     st.markdown("3. Which of the following algebraic expressions represents the set of number expressions in Box 1? **(Select all that apply)**")

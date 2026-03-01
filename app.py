@@ -1,157 +1,351 @@
 import streamlit as st
 
 # --- APP CONFIG ---
-st.set_page_config(page_title="Rapid Mathematics Assessment", page_icon="🧮")
+st.set_page_config(page_title="Rapid Mathematics Assessment", page_icon="📝", layout="wide")
 
-# --- CUSTOM CSS FOR FORMATTING ---
+# --- CUSTOM CSS ---
 st.markdown("""
     <style>
-    .main {
-        background-color: #f5f7f9;
+    .stTabs [data-baseweb="tab-list"] { gap: 10px; }
+    .stTabs [data-baseweb="tab"] {
+        height: 50px;
+        white-space: pre-wrap;
+        background-color: #f0f2f6;
+        border-radius: 5px 5px 0px 0px;
+        gap: 1px;
     }
-    .stRadio > div {
-        background-color: white;
-        padding: 10px;
-        border-radius: 10px;
-        border: 1px solid #ddd;
-    }
+    .stTabs [aria-selected="true"] { background-color: #e0e2e6; font-weight: bold; }
     </style>
     """, unsafe_allow_html=True)
 
-# --- SESSION STATE INITIALIZATION ---
-if 'answers' not in st.session_state:
-    st.session_state.answers = {}
+# --- SESSION STATE ---
+if 'responses' not in st.session_state:
+    st.session_state.responses = {}
 
-# --- TITLE & INSTRUCTIONS ---
-st.title("🧮 Rapid Mathematics Assessment (Grades 7-10)")
-st.info("""
-**Time Limit:** 90 Minutes  
-**Instructions:** Answer all items. For explanations, you may use English, Filipino, or Taglish.
+# --- HEADER ---
+st.title("Rapid Mathematics Assessment (Grades 7 - 10)")
+st.write("---")
+st.markdown("""
+**Assessment Instructions:** Your score on this test will help your teacher determine your readiness to learn the mathematics required at your grade level. You have **ninety (90) minutes** to complete this test.  
+* **Multiple-choice:** Select the letter of all correct options.  
+* **Short-answer:** Show necessary calculations or explanations (English, Filipino, or Taglish).
 """)
 
-# --- FORMULAS SIDEBAR ---
+# --- SIDEBAR FORMULAS ---
 with st.sidebar:
-    st.header("📐 Helpful Formulas")
+    st.header("📐 Formulas")
     st.latex(r"P = a + b + c")
-    st.latex(r"A = \frac{1}{2} \times b \times h")
+    st.latex(r"A = \frac{1}{2} \times base \times height")
     st.latex(r"C = 2\pi r")
     st.latex(r"A = \pi r^2")
-    st.latex(r"V = (Base Area) \times h")
+    st.latex(r"V = (\text{area of the base}) \times height")
 
-# --- ASSESSMENT TABS (To break down 47 questions) ---
-tabs = st.tabs(["Number Expressions", "Powers & Data", "Probability & Coordinates", "Algebra & Geometry"])
+# --- MAIN TABS ---
+tabs = st.tabs(["Items 1-11", "Items 12-22", "Items 23-33", "Items 34-47"])
 
-# --- TAB 1: NUMBER EXPRESSIONS (1-5) ---
+# --- TAB 1: Number Expressions & Powers ---
 with tabs[0]:
-    st.header("Section 1: Number Expressions")
-    st.write("**Box 1:**")
-    st.code("2 x 2 - 3 x 1\n3 x 3 - 4 x 2\n4 x 4 - 5 x 3\n5 x 5 - 6 x 4")
-
-    q1 = st.text_area("1. Verify the expression 4 x 4 - 5 x 3 equals 1. Show your computation:", key="q1")
-    q2 = st.text_input("2. What is the next number expression after 5 x 5 - 6 x 4?", key="q2")
-    q3 = st.radio("3. Which algebraic expression represents Box 1?", 
-                  ["Select...", "a. (n)(n) - (n+3)(n+1)", "b. (n)(n) - [(n+1)(n-1)]", "c. (n-1)(n-1) - n(n-2)", "d. n^2 - 3n(1)", "e. n^2 - n - 1"], key="q3")
-    q4 = st.text_area("4. Explain why you chose the expression in item 3:", key="q4")
-    q5 = st.text_input("5. What does 'n' represent in your chosen expression?", key="q5")
-
-# --- TAB 2: POWERS & DATA (6-16) ---
-with tabs[1]:
-    st.header("Section 2: Powers and Rational Numbers")
-    st.write("**Table 1:** 2^2=4, 2^3=8, 2^4=16, 2^5=32")
-    q6 = st.text_area("6. Show that 1024 is a power of 2:", key="q6")
-    q7 = st.text_input("7. Write the exponential form of 1024:", key="q7")
-    q8 = st.text_area("8. Find a power of 2 that is a multiple of 16 and is between 50 and 200:", key="q8")
+    st.subheader("Number Expressions")
+    st.info("**Box 1:**")
+    st.latex(r"2 \times 2 - 3 \times 1")
+    st.latex(r"3 \times 3 - 4 \times 2")
+    st.latex(r"4 \times 4 - 5 \times 3")
+    st.latex(r"5 \times 5 - 6 \times 4")
+    
+    st.markdown("1. Your classmate said that each of the four expressions in Box 1 is equivalent to 1. Verify what your classmate said by showing your computation for the number expression $4 \times 4 - 5 \times 3$.")
+    st.text_area("Your computation for Item 1:", key="q1")
+    
+    st.markdown("2. What must be the next number expression to $5 \times 5 - 6 \times 4$ in Box 1?")
+    st.text_input("Answer for Item 2:", key="q2")
+    
+    st.markdown("3. Which of the following algebraic expressions represents the set of number expressions in Box 1?")
+    st.radio("Options for Item 3:", [
+        "Select...",
+        "a. $(n)(n) - (n + 3)(n + 1)$",
+        "b. $(n)(n) - [(n + 1)(n - 1)]$",
+        "c. $(n - 1)(n - 1) - n(n - 2)$",
+        "d. $n^2 - 3n(1)$",
+        "e. $n^2 - n - 1$"
+    ], key="q3")
+    
+    st.markdown("4. Explain or show why you think you have chosen the correct algebraic expressions for the set of number expressions in Box 1.")
+    st.text_area("Explanation for Item 4:", key="q4")
+    
+    st.markdown("5. What does $n$ represent in your chosen expression in item 3?")
+    st.text_input("Answer for Item 5:", key="q5")
     
     st.divider()
-    q9 = st.radio("9. Is there a number between 0.998 and 0.999?", ["Select...", "Yes", "No"], key="q9")
-    q9_ex = st.text_input("If Yes, give an example. If No, explain why:", key="q9_ex")
-    q10 = st.text_area("10. Show how to subtract 0.998 from 0.999:", key="q10")
-    q11 = st.text_area("11. Is there a fraction between 3/4 and 1? Give example/explain:", key="q11")
+    st.subheader("Powers and Rational Numbers")
+    st.write("**Table 1: Powers of 2**")
+    st.latex(r"2^2 = 4, \quad 2^3 = 8, \quad 2^4 = 16, \quad 2^5 = 32")
+    
+    st.markdown("6. Show that 1024 is a power of 2. [Refer to Table 1]")
+    st.text_area("Show solution for Item 6:", key="q6")
+    
+    st.markdown("7. Write the exponential form of 1024.")
+    st.text_input("Answer for Item 7:", key="q7")
+    
+    st.markdown("8. Find a number that is a power of 2 that meets **BOTH** of these conditions:")
+    st.markdown("* The number is a multiple of 16.  \n* The number is also more than 50 but less than 200.")
+    st.text_input("Answer for Item 8:", key="q8")
+    
+    st.markdown("9. Is there a number between 0.998 and 0.999? If YES, give one example. If NO, explain why you think so.")
+    st.text_area("Answer/Explanation for Item 9:", key="q9")
+    
+    st.markdown("10. Show how you will subtract 0.998 from 0.999.")
+    st.text_area("Solution for Item 10:", key="q10")
+    
+    st.markdown("11. Is there a fraction that is greater than $\\frac{3}{4}$ but less than 1? If YES, give one example. If NO, explain why you think so.")
+    st.text_area("Answer/Explanation for Item 11:", key="q11")
 
-    st.header("Section 3: Data Interpretation")
-    st.write("[Placeholder for Figure 1: Absences vs Grades Scatter Plot]")
-    # st.image("figure1.png") # Uncomment this when you have the image file
-    q12 = st.number_input("12. How many students had a grade below 84?", step=1, key="q12")
-    q13 = st.text_area("13. Explain your answer to item 12 based on the graph:", key="q13")
-    q14 = st.radio("14. Correct interpretation of Figure 1:", 
-                   ["Select...", "a. Absences up, Grade up", "b. Absences down, Grade up", "c. Absences up, Grade down", "d. Absences down, Grade down"], key="q14")
-
-    st.write("[Placeholder for Figure 2: Monthly Income Bar Chart]")
-    q15 = st.text_area("15. Which purok shows more diversity/variability? Justify:", key="q15")
-    q16 = st.text_area("16. Should both puroks get the same financial aid? Explain using the graph:", key="q16")
-
-# --- TAB 3: PROBABILITY & COORDINATES (17-28) ---
-with tabs[2]:
-    st.header("Section 4: Probability and Tables")
-    st.write("**Table 2: Music & Sports Participation**")
+# --- TAB 2: Data & Coordinates ---
+with tabs[1]:
+    st.subheader("Data Interpretation")
+    st.write("**Figure 1: Relationship Between Absences and Academic Grade**")
+    # Placeholder for image
+    st.warning("")
+    
+    st.markdown("12. How many students had an overall academic grade below 84? [Refer to Figure 1]")
+    st.number_input("Count for Item 12:", step=1, key="q12")
+    
+    st.markdown("13. Explain why you think your answer in item 12 is correct based on the information shown in the graph in Figure 1.")
+    st.text_area("Explanation for Item 13:", key="q13")
+    
+    st.markdown("14. Which of the following can be a correct interpretation of the data presented in the graph in Figure 1?")
+    st.radio("Options for Item 14:", [
+        "Select...",
+        "a. As the number of absences increases, the overall academic grade also increases.",
+        "b. As the number of absences decreases, the overall academic grade increases.",
+        "c. As the number of absences increases, the overall academic grade decreases.",
+        "d. As the number of absences decreases, the overall academic grade also decreases."
+    ], key="q14")
+    
+    st.divider()
+    st.write("**Figure 2: Monthly Family Income in Purok 1 and Purok 2**")
+    st.warning("")
+    
+    st.markdown("15. Based on the graph in Figure 2, which of the two puroks shows more diversity in monthly family income? Explain or justify your answer.")
+    st.text_area("Answer for Item 15:", key="q15")
+    
+    st.markdown("16. The average monthly income of the families in Purok 1 and Purok 2 are equal. Should both purok be given the same amount of financial aid? What information in the graph in Figure 2 did you base your decision on?")
+    st.text_area("Answer for Item 16:", key="q16")
+    
+    st.divider()
+    st.subheader("Probability and Tables")
+    st.write("**Table 2: Music and Sports Activities Participation**")
     st.table({
-        "Activity": ["Music", "No Music", "Total"],
-        "Sports": [18, 42, 60],
-        "No Sports": [31, 19, 50],
+        "": ["Participated in music", "Did not participate in music", "Total"],
+        "Participated in sports": [18, 42, 60],
+        "Did not participate in sports": [31, 19, 50],
         "Total": [49, 61, 110]
     })
-    q17 = st.number_input("17. How many students participated in Music?", step=1, key="q17")
-    q18 = st.number_input("18. How many did not participate in any activity?", step=1, key="q18")
-    q19 = st.text_input("19. Probability of selecting a student in BOTH music and sports:", key="q19")
-    q20 = st.text_input("20. Write a question answerable by Table 2:", key="q20")
-
-    st.header("Section 5: Coordinates and Geometry")
-    st.write("[Placeholder for Figure 3: Number Line]")
-    q21 = st.radio("21. Position of point F:", ["Select...", "-500", "-400", "-300", "-200", "50"], key="q21")
-    q22 = st.text_input("22. Position of point G:", key="q22")
     
-    st.write("[Placeholder for Figure 4: Cartesian Plane]")
-    q23 = st.text_input("23. Coordinates of Point C:", key="q23")
-    q24 = st.multiselect("24. Select two points on the line through B and C:", ["(1,-1)", "(1,-2)", "(2,3)", "(3,2)", "(4,7)", "(5,6)"], key="q24")
-    q25 = st.radio("25. Which expression represents points on line AB?", ["Select...", "a. (x, -2x)", "b. (x, -2x+1)", "c. (x, -x)", "d. (x, -x+1)", "e. (x, -x+2)"], key="q25")
-    q26 = st.text_area("26. Area of Triangle ABC (Show solution):", key="q26")
-    q27 = st.radio("27. Which is shorter: House to School or House to Barangay Hall?", ["Select...", "School", "Barangay Hall"], key="q27")
-    q28 = st.text_area("28. Explain how you determined the shorter walk:", key="q28")
+    st.markdown("17. How many students participated in the music activity?")
+    st.number_input("Count for Item 17:", step=1, key="q17")
+    
+    st.markdown("18. How many students did not participate in any of the two activities?")
+    st.number_input("Count for Item 18:", step=1, key="q18")
+    
+    st.markdown("19. What is the probability of selecting a student who participated in both music and sports activities?")
+    st.text_input("Answer for Item 19 (as fraction or decimal):", key="q19")
+    
+    st.markdown("20. Write a question that can be answered using the information in Table 2.")
+    st.text_input("Question for Item 20:", key="q20")
+    
+    st.divider()
+    st.subheader("Coordinates")
+    st.write("**Figure 3: Number Line**")
+    st.warning("")
+    
+    st.markdown("21. What is the position of point F in Figure 3?")
+    st.radio("Options for Item 21:", ["Select...", "a. -500", "b. -400", "c. -300", "d. -200", "e. 50"], key="q21")
+    
+    st.markdown("22. What is the position of point G in Figure 3?")
+    st.text_input("Answer for Item 22:", key="q22")
 
-# --- TAB 4: ALGEBRA & GEOMETRY (29-47) ---
+# --- TAB 3: Cartesian Plane & Algebra ---
+with tabs[2]:
+    st.subheader("Cartesian Plane")
+    st.write("**Figure 4: Cartesian Grid**")
+    st.warning("")
+    
+    st.markdown("23. What are the coordinates of Point C in Figure 4?")
+    st.text_input("Coordinates (x, y) for Item 23:", key="q23")
+    
+    st.markdown("24. A line is drawn passing through points B and C in Figure 4. Select two ordered pairs that represent the coordinates of points that are also in this line.")
+    st.multiselect("Select points for Item 24:", ["(1, -1)", "(1, -2)", "(2, 3)", "(3, 2)", "(4, 7)", "(5, 6)"], key="q24")
+    
+    st.markdown("25. Draw a line through points A and B in Figure 4. Which of the following ordered pairs represent all the points that are on this line?")
+    st.radio("Options for Item 25:", [
+        "Select...",
+        "a. $(x, -2x)$",
+        "b. $(x, -2x + 1)$",
+        "c. $(x, -x)$",
+        "d. $(x, -x + 1)$",
+        "e. $(x, -x + 2)$"
+    ], key="q25")
+    
+    st.markdown("26. In Figure 4, connecting the points A, B and C will form a triangle, called triangle ABC. What is the area of triangle ABC? Show your method for getting the area.")
+    st.text_area("Solution for Item 26:", key="q26")
+    
+    st.markdown("27. A point represents position. Suppose in Figure 4, point A represents the position of your house, point B represents the position of your school and point C represents the position of the barangay hall. There is a straight road that you can take to the school and the barangay hall from your house. Which is the shorter walk from your house, going to the school or to the barangay hall?")
+    st.text_input("Answer for Item 27:", key="q27")
+    
+    st.markdown("28. Show or explain how you determined your answer in item 27.")
+    st.text_area("Explanation for Item 28:", key="q28")
+    
+    st.divider()
+    st.subheader("Algebraic Reasoning")
+    st.markdown("29. If $r$ is an integer, select all possible values that can be represented by $2r - 1$.")
+    st.multiselect("Values for Item 29:", ["-5", "-27", "-82", "99", "46", "122"], key="q29")
+    
+    st.markdown("30. At a fruit stand, apples are priced at 3 for Php100. Which of the following expressions can be used to find the amount to be paid (cost) for any number ($n$) of apples?")
+    st.multiselect("Options for Item 30:", [
+        "a. $cost = 100/3$",
+        "b. $cost = 3n/100$",
+        "c. $cost = 100n$",
+        "d. $cost = 100n/3$",
+        "e. $3 : 100 = n : cost$"
+    ], key="q30")
+    
+    st.write("**Box 2:** $17 + a = b + 3$")
+    st.markdown("31. Write two possible values for $a$ and $b$ that will make the equation in Box 2 true.")
+    st.text_input("Values for Item 31:", key="q31")
+    
+    st.markdown("32. Which statement is always true about $a$ and $b$? [Refer to Box 2]")
+    st.radio("Options for Item 32:", [
+        "Select...",
+        "a. $a$ is greater than $b$.",
+        "b. The sum of $a$ and $b$, $(a+b)$ is 20.",
+        "c. The difference between $b$ and $a$, $(b-a)$ is 14.",
+        "d. $a$ and $b$ can take any value."
+    ], key="q32")
+    
+    st.markdown("33. Shown below is the solution to the given linear equation:")
+    st.latex(r"5y - 8 = 14 - 3y \quad \text{(Equation 1)}")
+    st.latex(r"5y + 3y - 8 = 14 \quad \text{(Equation 2)}")
+    st.markdown("What reason can we use to transform equation 1 into equation 2?")
+    st.radio("Options for Item 33:", [
+        "Select...",
+        "a. If we subtract $3y$ from both sides, the equation remains true.",
+        "b. If we subtract $8$ from both sides, the equation remains true.",
+        "c. If we add $3y$ to both sides, the equation remains true.",
+        "d. If we divide both sides by $8$, the equation remains true."
+    ], key="q33")
+
+# --- TAB 4: Equations & Geometry ---
 with tabs[3]:
-    st.header("Section 6: Algebraic Reasoning")
-    q29 = st.multiselect("29. Select all possible values for 2r-1 (r is integer):", ["-5", "-27", "-82", "99", "46", "122"], key="q29")
-    q30 = st.multiselect("30. Expressions for cost of apples (3 for Php100):", ["a. 100/3", "b. 3n/100", "c. 100n", "d. 100n/3", "e. 3:100 = n:cost"], key="q30")
+    st.subheader("Equations and Graphs")
+    st.write("**Figure 5: Tricycle Rental Cost ($C = 250n + 200$)**")
+    st.warning("")
     
-    st.write("**Box 2: 17 + a = b + 3**")
-    q31 = st.text_input("31. Two possible values for a and b:", key="q31")
-    q32 = st.radio("32. Always true for Box 2?", ["Select...", "a. a > b", "b. a + b = 20", "c. b - a = 14", "d. Any value"], key="q32")
-    q33 = st.radio("33. Reason to transform 5y-8 = 14-3y to 5y+3y-8 = 14?", ["Select...", "Subtract 3y", "Subtract 8", "Add 3y", "Divide by 8"], key="q33")
-
-    st.header("Section 7: Equations and Graphs")
-    st.write("**Figure 5: C = 250n + 200**")
-    q34 = st.number_input("34. Rental cost for 5 days?", key="q34")
-    q35 = st.radio("35. What does 250 represent?", ["Select...", "Daily cost", "Number of days", "Fixed cost", "Total cost for 1 day"], key="q35")
-    q36 = st.text_input("36. What does 200 represent?", key="q36")
-    q37 = st.radio("37. Which aspect of the graph is 200?", ["Select...", "x-intercept", "y-intercept", "slope", "minimum point"], key="q37")
-
-    st.header("Section 8: Triangles and Circles")
-    st.write("[Placeholder for Figure 6: Triangle PQR]")
-    q38 = st.multiselect("38. Possible values for q and r if p=30 (Select 2):", ["a. q=10, r=140", "b. q=10, r=130", "c. q=110, r=30", "d. q=100, r=80", "e. q=100, r=50"], key="q38")
-    q39 = st.multiselect("39. True about p and q if r=60 and exterior angle is 130:", ["a. p+q=130", "b. many values", "c. p=70, q=50", "d. p=50, q=70", "e. r+p=130"], key="q39")
-    q40 = st.multiselect("40. Triangle properties that help (Select all):", ["a. Equilateral=60", "b. Isosceles angles", "c. Linear pair", "d. Exterior angle sum of remote", "e. Six exterior angles", "f. Exterior sum 360"], key="q40")
-
+    st.markdown("34. How much does it cost to rent the tricycle for 5 days? [Refer to Figure 5]")
+    st.text_input("Answer for Item 34:", key="q34")
+    
+    st.markdown("35. What does the number 250 in the formula represent? [Refer to Figure 5]")
+    st.radio("Options for Item 35:", [
+        "Select...",
+        "a. The daily cost of renting the tricycle.",
+        "b. The number of days the tricycle is rented.",
+        "c. The fixed cost of renting the tricycle.",
+        "d. The total cost of renting for one day."
+    ], key="q35")
+    
+    st.markdown("36. In Figure 5, what does the number 200 in the formula represent?")
+    st.text_input("Answer for Item 36:", key="q36")
+    
+    st.markdown("37. What aspect of the graph in Figure 5 represents the 200 in the formula?")
+    st.radio("Options for Item 37:", ["Select...", "a. x-intercept", "b. y-intercept", "c. slope", "d. minimum point"], key="q37")
+    
     st.divider()
-    st.write("[Placeholder for Figure 7: Dog House]")
-    q41 = st.radio("41. Lengths of other two sides (ratio 3:3:2, short side=1m):", ["Select...", "a. 1.5m each", "b. 2m and 3m", "c. 3m each", "d. 4m and 6m"], key="q41")
-    q42 = st.text_area("42. Are sides proportional to toy storage? Explain:", key="q42")
-    q43 = st.radio("43. Toy storage base=25cm, other two sides?", ["Select...", "a. 37.5cm each", "b. 50cm and 75cm", "c. 75cm each", "d. 100cm and 150cm"], key="q43")
-
+    st.subheader("Triangles")
+    st.write("**Figure 6: Triangle $PQR$**")
+    st.warning("")
+    
+    st.markdown("38. In Figure 6, if the measure of angle $P$ is 30 degrees (that is, $p = 30$), which of the following are possible values for $q$ and $r$? Choose 2 that are correct.")
+    st.multiselect("Options for Item 38:", [
+        "a. $q = 10$ and $r = 140$",
+        "b. $q = 10$ and $r = 130$",
+        "c. $q = 110$ and $r = 30$",
+        "d. $q = 100$ and $r = 80$",
+        "e. $q = 100$ and $r = 50$"
+    ], key="q38")
+    
+    st.markdown("39. In Figure 6, if the measure of angle $R$ is 60 degrees (that is, $r = 60$) and the measure of the exterior angle at $Q$ is 130, what is true about the values of $p$ and $q$? Choose at least one.")
+    st.multiselect("Options for Item 39:", [
+        "a. The sum of $p$ and $q$ is 130.",
+        "b. $p$ and $q$ can have several values.",
+        "c. The value of $p$ is 70 and $q$ is 50.",
+        "d. The value of $p$ is 50 and $q$ is 70.",
+        "e. The value of $r$ plus $p$ is 130."
+    ], key="q39")
+    
+    st.markdown("40. Which of the following statements about the properties of triangles will help determine the values of $p$ and $q$ in the preceding question?")
+    st.multiselect("Options for Item 40:", [
+        "a. Each angle of an equilateral triangle is 60 degrees.",
+        "b. In an isosceles triangle, the base angles are equal.",
+        "c. The exterior angle and the adjacent interior angle form a linear pair.",
+        "d. The measure of the exterior angle is equal to the sum of the two remote interior angles.",
+        "e. There are six exterior angles in any triangle.",
+        "f. The sum of all exterior angles is 360 degrees."
+    ], key="q40")
+    
     st.divider()
-    st.write("[Placeholder for Figure 8 & 9: Circular Pool]")
-    q44 = st.text_area("44. Area of sidewalk (diameter=10m, width=1m, pi=3.14):", key="q44")
-    q45 = st.radio("45. Volume of water (depth 1.5m and 0.6m):", ["Select...", "a. 10pi(2.1)", "b. 25pi(2.1)", "c. 10pi(2.1)^2", "d. 25pi(2.1)^2", "e. 100pi(2.1)^2"], key="q45")
-
+    st.subheader("Proportionality")
+    st.write("**Figure 7: Dog House and Toy Storage**")
+    st.warning("")
+    
+    st.markdown("41. If the sides of the dog house have a ratio of 3:3:2 and the shortest side is 1 meter, what are the lengths of the other two sides?")
+    st.radio("Options for Item 41:", [
+        "Select...",
+        "a. The other two sides are 1.5 meters each.",
+        "b. The other two sides are 2 meters and 3 meters.",
+        "c. The other two sides are 3 meters each.",
+        "d. The other two sides are 4 meters and 6 meters."
+    ], key="q41")
+    
+    st.markdown("42. In Figure 7, are the sides of the triangular dog house proportional to the sides of the triangular toy storage? Show your solution or explain.")
+    st.text_area("Answer for Item 42:", key="q42")
+    
+    st.markdown("43. The base of the toy storage measures 25 centimeters. What are the lengths of its other two sides? [Refer to Figure 7]")
+    st.radio("Options for Item 43:", [
+        "Select...",
+        "a. The other two sides are 37.5 centimeters each.",
+        "b. The other two sides measure 50 and 75 centimeters.",
+        "c. The other two sides are 75 centimeters each.",
+        "d. The other two sides measure 100 and 150 centimeters."
+    ], key="q43")
+    
     st.divider()
-    st.write("[Placeholder for Figure 10: Rolling Gear]")
-    q46 = st.text_area("46. Distance for 5 rolls (diameter=60cm):", key="q46")
-    q47 = st.text_input("47. Degrees rotated after 5 rolls:", key="q47")
+    st.subheader("Circles and Volumes")
+    st.write("**Figure 8 & 9: Circular Pool with Sidewalk**")
+    st.warning("")
+    
+    st.markdown("44. What is the area of the sidewalk in square meters surrounding the pool? Show your solution. [Refer to Figure 8] Use $\pi = 3.14$.")
+    st.text_area("Solution for Item 44:", key="q44")
+    
+    st.markdown("45. The pool has depths of 1.5 meters and 0.6 meters. Which of the following will give the total volume of water in the pool? [Refer to Figure 9]")
+    st.radio("Options for Item 45:", [
+        "Select...",
+        "a. $10\pi(2.1)$ cubic meters",
+        "b. $25\pi(2.1)$ cubic meters",
+        "c. $10\pi(2.1)^2$ cubic meters",
+        "d. $25\pi(2.1)^2$ cubic meters",
+        "e. $100\pi(2.1)^2$ cubic meters"
+    ], key="q45")
+    
+    st.divider()
+    st.subheader("Rotation and Distance")
+    st.write("**Figure 10: Rolling Wheel (Diameter = 60 cm)**")
+    st.warning("")
+    
+    st.markdown("46. The wheel in Figure 10 is rolled exactly 5 times. Show how you can compute the distance travelled by the wheel.")
+    st.text_area("Solution for Item 46:", key="q46")
+    
+    st.markdown("47. How many degrees did the wheel's pin rotate after 5 rolls? [Refer to Figure 10]")
+    st.text_input("Answer for Item 47:", key="q47")
 
-# --- SUBMISSION ---
-st.divider()
-if st.button("Submit Assessment"):
-    st.success("Your responses have been recorded!")
+# --- FOOTER ---
+if st.button("Complete Assessment"):
     st.balloons()
-    st.write("### Summary of Responses:")
-    st.write(st.session_state.answers)
+    st.success("Responses submitted successfully!")

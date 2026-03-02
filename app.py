@@ -139,10 +139,9 @@ with tabs[0]:
     
     st.markdown("3. Which of the following algebraic expressions represents the set of number expressions in Box 1? **(Select all that apply)**")
     
-    # Professional mathematical formatting for Item 3 exactly as requested
+    # Clean professional formatting for Item 3 - no redundant text
     st.markdown("""
     <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-        <p style="font-size: 16px; margin-bottom: 10px;"><b>Choose from the following options:</b></p>
         <ul style="list-style-type: none; padding-left: 0;">
             <li style="margin-bottom: 12px;">a. \( (n)(n) - (n + 3)(n + 1) \)</li>
             <li style="margin-bottom: 12px;">b. \( (n)(n) - [(n + 1)(n - 1)] \)</li>

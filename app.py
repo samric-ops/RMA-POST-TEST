@@ -261,18 +261,8 @@ with tabs[1]:
     
     st.markdown("21. What is the position of point \( F \) in Figure 3? **(Select all that apply)**")
     
-    # UPDATED: Professional formatting for Item 21 choices
-    st.markdown("""
-    <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-        <ul style="list-style-type: none; padding-left: 0;">
-            <li style="margin-bottom: 10px;">a. Point \( F \) is at -500.</li>
-            <li style="margin-bottom: 10px;">b. Point \( F \) is at -400.</li>
-            <li style="margin-bottom: 10px;">c. Point \( F \) is at -300.</li>
-            <li style="margin-bottom: 10px;">d. Point \( F \) is at -200.</li>
-            <li style="margin-bottom: 10px;">e. Point \( F \) is at 50.</li>
-        </ul>
-    </div>
-    """, unsafe_allow_html=True)
+    # REMOVED: Ang duplicate na choices sa itaas
+    # Dropdown na lang ang natira
     
     st.multiselect("Select your answer(s):", [
         "a. Point F is at -500",

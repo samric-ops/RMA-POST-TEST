@@ -39,6 +39,11 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
+# --- RESET SESSION STATE FOR ITEM 3 ---
+# Clear any existing responses for q3 to ensure new formatting applies
+if 'q3' in st.session_state:
+    del st.session_state['q3']
+
 # --- FUNCTION TO DISPLAY FIGURES ---
 def display_figure(figure_num, description, image_path=None):
     """Display figure with optional image"""
@@ -139,7 +144,7 @@ with tabs[0]:
     
     st.markdown("3. Which of the following algebraic expressions represents the set of number expressions in Box 1? **(Select all that apply)**")
     
-    # Clean professional formatting for Item 3 - no redundant text
+    # Professional formatting for Item 3 options
     st.markdown("""
     <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
         <ul style="list-style-type: none; padding-left: 0;">
@@ -157,8 +162,8 @@ with tabs[0]:
         "a. (n)(n) - (n + 3)(n + 1)",
         "b. (n)(n) - [(n + 1)(n - 1)]", 
         "c. (n - 1)(n - 1) - n(n - 2)",
-        "d. n² - 3n(1)",
-        "e. n² - n - 1"
+        "d. n^2 - 3n(1)",
+        "e. n^2 - n - 1"
     ], key="q3")
     
     st.markdown("4. Explain or show why you think you have chosen the correct algebraic expressions for the set of number expressions in Box 1.")

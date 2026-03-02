@@ -134,11 +134,11 @@ with tabs[0]:
     
     st.markdown("3. Which of the following algebraic expressions represents the set of number expressions in Box 1? **(Select all that apply)**")
     st.multiselect("Options for Item 3:", [
-        "a. $(n)(n) - (n + 3)(n + 1)$",
-        "b. $(n)(n) - [(n + 1)(n - 1)]$",
-        "c. $(n - 1)(n - 1) - n(n - 2)$",
-        "d. $n^2 - 3n(1)$",
-        "e. $n^2 - n - 1$"
+        "a. (n)(n) - (n + 3)(n + 1)",
+        "b. (n)(n) - [(n + 1)(n - 1)]",
+        "c. (n - 1)(n - 1) - n(n - 2)",
+        "d. n^2 - 3n(1)",
+        "e. n^2 - n - 1"
     ], key="q3")
     
     st.markdown("4. Explain or show why you think you have chosen the correct algebraic expressions for the set of number expressions in Box 1.")

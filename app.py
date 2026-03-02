@@ -1,7 +1,6 @@
 import streamlit as st
-import base64
 from PIL import Image
-import io
+import os
 
 # --- APP CONFIG ---
 st.set_page_config(page_title="Rapid Mathematics Assessment", page_icon="📝", layout="wide")
@@ -32,245 +31,27 @@ st.markdown("""
         margin-top: 10px;
         color: #666;
     }
-    .figure-data {
-        background-color: #e8f4f8;
-        padding: 15px;
-        border-radius: 8px;
-        margin: 10px 0;
-        font-family: monospace;
-    }
     </style>
     """, unsafe_allow_html=True)
 
-# --- FUNCTION TO DISPLAY FIGURE 1 (Data Table) ---
-def display_figure_1():
-    st.markdown("""
-    <div class="figure-container">
-        <h4>Figure 1: Relationship Between the Number of Absences and Overall Academic Grade of Students in Masipag Section for Two Quarters</h4>
-        <p><b>X-axis:</b> Number of Absences | <b>Y-axis:</b> Overall Academic Grade</p>
-        <div class="figure-data">
-            <table style="width:100%; border-collapse: collapse; text-align: center;">
-                <tr style="background-color: #4CAF50; color: white;">
-                    <th style="padding: 10px; border: 1px solid #ddd;">Number of Absences</th>
-                    <th style="padding: 10px; border: 1px solid #ddd;">Overall Academic Grade</th>
-                </tr>
-                <tr><td style="padding: 8px; border: 1px solid #ddd;">0</td><td style="padding: 8px; border: 1px solid #ddd;">94.0</td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #ddd;">1</td><td style="padding: 8px; border: 1px solid #ddd;">92.5</td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #ddd;">2</td><td style="padding: 8px; border: 1px solid #ddd;">90.0</td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #ddd;">3</td><td style="padding: 8px; border: 1px solid #ddd;">88.0</td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #ddd;">4</td><td style="padding: 8px; border: 1px solid #ddd;">86.0</td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #ddd;">5</td><td style="padding: 8px; border: 1px solid #ddd;">84.0</td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #ddd;">6</td><td style="padding: 8px; border: 1px solid #ddd;">82.0</td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #ddd;">7</td><td style="padding: 8px; border: 1px solid #ddd;">80.0</td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #ddd;">8</td><td style="padding: 8px; border: 1px solid #ddd;">78.0</td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #ddd;">9</td><td style="padding: 8px; border: 1px solid #ddd;">80.0</td></tr>
-            </table>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-# --- FUNCTION TO DISPLAY FIGURE 2 (Income Data) ---
-def display_figure_2():
-    st.markdown("""
-    <div class="figure-container">
-        <h4>Figure 2: Monthly Family Income in Purok 1 and Purok 2</h4>
-        <div class="figure-data">
-            <table style="width:100%; border-collapse: collapse; text-align: center;">
-                <tr style="background-color: #4CAF50; color: white;">
-                    <th style="padding: 10px; border: 1px solid #ddd;">Monthly Family Income (in Thousand Pesos)</th>
-                    <th style="padding: 10px; border: 1px solid #ddd;">Purok 1</th>
-                    <th style="padding: 10px; border: 1px solid #ddd;">Purok 2</th>
-                </tr>
-                <tr><td style="padding: 8px; border: 1px solid #ddd;">P8</td><td style="padding: 8px; border: 1px solid #ddd;">1.0</td><td style="padding: 8px; border: 1px solid #ddd;">0.0</td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #ddd;">P10</td><td style="padding: 8px; border: 1px solid #ddd;">1.0</td><td style="padding: 8px; border: 1px solid #ddd;">0.0</td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #ddd;">P13</td><td style="padding: 8px; border: 1px solid #ddd;">3.0</td><td style="padding: 8px; border: 1px solid #ddd;">0.0</td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #ddd;">P14</td><td style="padding: 8px; border: 1px solid #ddd;">4.0</td><td style="padding: 8px; border: 1px solid #ddd;">0.0</td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #ddd;">P15</td><td style="padding: 8px; border: 1px solid #ddd;">1.0</td><td style="padding: 8px; border: 1px solid #ddd;">0.0</td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #ddd;">P16</td><td style="padding: 8px; border: 1px solid #ddd;">1.0</td><td style="padding: 8px; border: 1px solid #ddd;">0.0</td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #ddd;">P17</td><td style="padding: 8px; border: 1px solid #ddd;">1.0</td><td style="padding: 8px; border: 1px solid #ddd;">0.0</td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #ddd;">P18</td><td style="padding: 8px; border: 1px solid #ddd;">4.0</td><td style="padding: 8px; border: 1px solid #ddd;">0.0</td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #ddd;">P19</td><td style="padding: 8px; border: 1px solid #ddd;">4.0</td><td style="padding: 8px; border: 1px solid #ddd;">0.0</td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #ddd;">P20</td><td style="padding: 8px; border: 1px solid #ddd;">2.0</td><td style="padding: 8px; border: 1px solid #ddd;">0.0</td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #ddd;">P21</td><td style="padding: 8px; border: 1px solid #ddd;">3.0</td><td style="padding: 8px; border: 1px solid #ddd;">0.0</td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #ddd;">P22</td><td style="padding: 8px; border: 1px solid #ddd;">2.0</td><td style="padding: 8px; border: 1px solid #ddd;">0.0</td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #ddd;">P24</td><td style="padding: 8px; border: 1px solid #ddd;">2.0</td><td style="padding: 8px; border: 1px solid #ddd;">0.0</td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #ddd;">P28</td><td style="padding: 8px; border: 1px solid #ddd;">1.0</td><td style="padding: 8px; border: 1px solid #ddd;">0.0</td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #ddd;">P32</td><td style="padding: 8px; border: 1px solid #ddd;">1.0</td><td style="padding: 8px; border: 1px solid #ddd;">0.0</td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #ddd;">P35</td><td style="padding: 8px; border: 1px solid #ddd;">1.0</td><td style="padding: 8px; border: 1px solid #ddd;">0.0</td></tr>
-                <tr><td style="padding: 8px; border: 1px solid #ddd;">P40</td><td style="padding: 8px; border: 1px solid #ddd;">1.0</td><td style="padding: 8px; border: 1px solid #ddd;">0.0</td></tr>
-            </table>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-# --- FUNCTION TO DISPLAY FIGURE 3 (Number Line) ---
-def display_figure_3():
-    st.markdown("""
-    <div class="figure-container">
-        <h4>Figure 3: Number Line</h4>
-        <div style="font-family: monospace; font-size: 18px; padding: 20px;">
-            <pre>
-    F           G
-    |           |
-    100         500
-            </pre>
-        </div>
-        <p><b>Point F</b> is at position 100 | <b>Point G</b> is at position 500</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-# --- FUNCTION TO DISPLAY FIGURE 4 (Cartesian Grid) ---
-def display_figure_4():
-    st.markdown("""
-    <div class="figure-container">
-        <h4>Figure 4: Cartesian Grid</h4>
-        <div style="font-family: monospace; font-size: 16px; padding: 20px;">
-            <pre>
-    A(-2,4)
+# --- FUNCTION TO DISPLAY FIGURES ---
+def display_figure(figure_num, description, image_path=None):
+    """Display figure with optional image"""
+    st.markdown(f"**{description}**")
     
-    B(2,0)
-    
-    C (coordinates unknown)
-    
-    -3   -2   -1   0   1   2   3   4   5
-            </pre>
-        </div>
-        <p><b>Point A:</b> (-2, 4) | <b>Point B:</b> (2, 0) | <b>Point C:</b> Unknown</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-# --- FUNCTION TO DISPLAY FIGURE 5 (Tricycle Rental) ---
-def display_figure_5():
-    st.markdown("""
-    <div class="figure-container">
-        <h4>Figure 5: Graph of c = 250 + 200d</h4>
-        <p><b>Formula:</b> c = 250 + 200d</p>
-        <p><b>Y-axis (c):</b> Rental cost | <b>X-axis (d):</b> Number of days</p>
-        <div style="background-color: #e8f4f8; padding: 10px; border-radius: 5px;">
-            <p>📈 <b>Linear Equation:</b> c = 250d + 200</p>
-            <p>📌 <b>y-intercept:</b> 200 (fixed cost)</p>
-            <p>📌 <b>slope:</b> 250 (daily rate)</p>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-# --- FUNCTION TO DISPLAY FIGURE 6 (Triangle PQR) ---
-def display_figure_6():
-    st.markdown("""
-    <div class="figure-container">
-        <h4>Figure 6: Triangle PQR</h4>
-        <div style="font-family: monospace; font-size: 18px; padding: 20px;">
-            <pre>
-          g
-          /\\
-         /  \\
-        /    \\
-    R  /______\\  Q
-        \\    /
-         \\  /
-          \\/
-          f
-          
-          h
-            </pre>
-        </div>
-        <p><b>Lines:</b> f, g, and h intersect at points P, Q, and R</p>
-        <p><b>Angles:</b> p (at P), q (at Q), r (at R)</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-# --- FUNCTION TO DISPLAY FIGURE 7 (Dog House) ---
-def display_figure_7():
-    st.markdown("""
-    <div class="figure-container">
-        <h4>Figure 7: Dog House and Toy Storage</h4>
-        <div style="font-family: monospace; font-size: 18px; padding: 20px;">
-            <pre>
-                /\\
-               /  \\
-              /    \\
-             /      \\
-            /        \\
-           /__________\\
-          |   25 cm    |
-          |            |
-          |   1 meter  |
-          |____________|
-            </pre>
-        </div>
-        <p><b>Base of toy storage:</b> 25 cm | <b>Shortest side of dog house:</b> 1 meter</p>
-        <p><i>Original image generated using Ideogram, subsequently edited and modified.</i></p>
-    </div>
-    """, unsafe_allow_html=True)
-
-# --- FUNCTION TO DISPLAY FIGURE 8 (Circular Pool - Top View) ---
-def display_figure_8():
-    st.markdown("""
-    <div class="figure-container">
-        <h4>Figure 8: Circular Pool (top view)</h4>
-        <div style="font-family: monospace; font-size: 18px; padding: 20px;">
-            <pre>
-                ⭕
-               /   \\
-              |  10m |
-               \\   /
-                ⭕
-                
-            Sidewalk: 1m wide around the pool
-            </pre>
-        </div>
-        <p><b>Diameter of pool:</b> 10 meters | <b>Sidewalk width:</b> 1 meter</p>
-        <p><b>Formulas:</b> C = 2πr | A = πr²</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-# --- FUNCTION TO DISPLAY FIGURE 9 (Pool Depth) ---
-def display_figure_9():
-    st.markdown("""
-    <div class="figure-container">
-        <h4>Figure 9: Pool Depth (auxiliary view)</h4>
-        <div style="font-family: monospace; font-size: 18px; padding: 20px;">
-            <pre>
-    Children side: 0.6 m deep
-    
-    ____________________
-    |                  |
-    |                  |
-    |                  |
-    |                  |
-    |__________________|
-    Adults side: 1.5 m deep
-    
-    Width: 10 meters
-            </pre>
-        </div>
-        <p><b>Depth (adults):</b> 1.5 meters | <b>Depth (children):</b> 0.6 meters</p>
-        <p><b>Pool divided into two equal parts</b></p>
-        <p><i>Use π = 3.14</i></p>
-    </div>
-    """, unsafe_allow_html=True)
-
-# --- FUNCTION TO DISPLAY FIGURE 10 (Rolling Wheel) ---
-def display_figure_10():
-    st.markdown("""
-    <div class="figure-container">
-        <h4>Figure 10: Rolling Wheel</h4>
-        <div style="font-family: monospace; font-size: 18px; padding: 20px;">
-            <pre>
-                ⭕
-               /   \\
-              |  pin |
-               \\   /
-                ⭕
-                
-            Diameter: 60 cm
-            </pre>
-        </div>
-        <p><b>Diameter of wheel:</b> 60 cm</p>
-        <p><b>Pin position:</b> Marked on the wheel</p>
-        <p><i>Wheel is rolled along a straight path</i></p>
-    </div>
-    """, unsafe_allow_html=True)
+    if image_path and os.path.exists(image_path):
+        # Display actual image
+        image = Image.open(image_path)
+        st.image(image, caption=f"Figure {figure_num}", use_container_width=True)
+    else:
+        # Display placeholder with instructions
+        st.warning(f"⚠️ **Figure {figure_num}** would be displayed here.")
+        st.info(f"📌 **Instructions:** To display Figure {figure_num}, save the image as 'figure_{figure_num}.png' in the same folder as this app.")
+        
+        # Optional: Show file uploader for users to upload images
+        uploaded_file = st.file_uploader(f"Upload Figure {figure_num}", type=['png', 'jpg', 'jpeg'], key=f"upload_{figure_num}")
+        if uploaded_file:
+            st.image(uploaded_file, caption=f"Figure {figure_num} - {description}", use_container_width=True)
 
 # --- SESSION STATE ---
 if 'responses' not in st.session_state:
@@ -318,18 +99,19 @@ with st.sidebar:
     """)
     
     st.divider()
-    st.header("📊 Figures Legend")
+    st.header("📁 Figure Files")
     st.markdown("""
-    - **Figure 1:** Absences vs Grade (data table)
-    - **Figure 2:** Income data (frequency table)
-    - **Figure 3:** Number line
-    - **Figure 4:** Cartesian grid
-    - **Figure 5:** Rental cost graph
-    - **Figure 6:** Triangle PQR
-    - **Figure 7:** Dog house
-    - **Figure 8:** Pool (top view)
-    - **Figure 9:** Pool depths
-    - **Figure 10:** Rolling wheel
+    To display all figures, save these files in the app folder:
+    - `figure_1.png` - Absences vs Academic Grade
+    - `figure_2.png` - Monthly Family Income
+    - `figure_3.png` - Number Line
+    - `figure_4.png` - Cartesian Grid
+    - `figure_5.png` - Tricycle Rental Cost
+    - `figure_6.png` - Triangle PQR
+    - `figure_7.png` - Dog House and Toy Storage
+    - `figure_8.png` - Circular Pool (top view)
+    - `figure_9.png` - Pool Depth (auxiliary view)
+    - `figure_10.png` - Rolling Wheel
     """)
 
 # --- MAIN TABS ---
@@ -400,9 +182,11 @@ with tabs[0]:
 with tabs[1]:
     st.subheader("Data Interpretation")
     
-    # Figure 1 - Embedded
-    st.markdown("### Figure 1: Relationship Between Absences and Academic Grade")
-    display_figure_1()
+    # Figure 1
+    with st.container():
+        st.markdown("### Figure 1: Relationship Between Absences and Academic Grade")
+        st.markdown("*The graph shows the relationship between student absences and overall academic grade across all subjects in the Masipag section, a special class for arts and design, for two academic quarters. Each point on the graph represents an individual student.*")
+        display_figure(1, "Absences vs Academic Grade", "figure_1.png")
     
     st.markdown("12. How many students had an overall academic grade below 84? [Refer to Figure 1]")
     st.number_input("Count for Item 12:", step=1, key="q12")
@@ -420,9 +204,11 @@ with tabs[1]:
     
     st.divider()
     
-    # Figure 2 - Embedded
-    st.markdown("### Figure 2: Monthly Family Income in Purok 1 and Purok 2")
-    display_figure_2()
+    # Figure 2
+    with st.container():
+        st.markdown("### Figure 2: Monthly Family Income in Purok 1 and Purok 2")
+        st.markdown("*Barangay San Mateo is planning to provide financial assistance for its two puroks. They surveyed the monthly family incomes in Purok 1 and Purok 2.*")
+        display_figure(2, "Monthly Family Income", "figure_2.png")
     
     st.markdown("15. Based on the graph in Figure 2, which of the two puroks shows more diversity in monthly family income? Explain or justify your answer.")
     st.text_area("Answer for Item 15:", key="q15")
@@ -458,9 +244,11 @@ with tabs[1]:
     st.divider()
     st.subheader("Coordinates")
     
-    # Figure 3 - Embedded
-    st.markdown("### Figure 3: Number Line")
-    display_figure_3()
+    # Figure 3
+    with st.container():
+        st.markdown("### Figure 3: Number Line")
+        st.markdown("*A number describes the position of a point on a number line. The picture below is part of a number line.*")
+        display_figure(3, "Number Line", "figure_3.png")
     
     st.markdown("21. What is the position of point F in Figure 3? **(Select all that apply)**")
     st.multiselect("Options for Item 21:", ["a. -500", "b. -400", "c. -300", "d. -200", "e. 50"], key="q21")
@@ -473,9 +261,10 @@ with tabs[2]:
     st.subheader("Cartesian Plane")
     st.markdown("*An ordered pair of numbers describes the position of a point on a Cartesian plane. This position is called the coordinates of the point. The first number in the ordered pair is called the x-coordinate and the second number is called the y-coordinate.*")
     
-    # Figure 4 - Embedded
-    st.markdown("### Figure 4: Cartesian Grid")
-    display_figure_4()
+    # Figure 4
+    with st.container():
+        st.markdown("### Figure 4: Cartesian Grid")
+        display_figure(4, "Cartesian Grid", "figure_4.png")
     
     st.markdown("23. What are the coordinates of Point C in Figure 4?")
     st.text_input("Coordinates (x, y) for Item 23:", key="q23")
@@ -554,9 +343,11 @@ with tabs[3]:
     st.subheader("Equations and Graphs")
     st.markdown("*The cost of renting a tricycle per day is shown in the graph and formula below.*")
     
-    # Figure 5 - Embedded
-    st.markdown("### Figure 5: Tricycle Rental Cost")
-    display_figure_5()
+    # Figure 5
+    with st.container():
+        st.markdown("### Figure 5: Tricycle Rental Cost")
+        st.markdown("Formula: $C = 250n + 200$")
+        display_figure(5, "Tricycle Rental Cost Graph", "figure_5.png")
     
     st.markdown("34. How much does it cost to rent the tricycle for 5 days? [Refer to Figure 5]")
     st.text_input("Answer for Item 34:", key="q34")
@@ -584,9 +375,10 @@ with tabs[3]:
     st.subheader("Triangles")
     st.markdown("*Lines f, g, and h intersect at points P, Q and R, forming a triangle. The measures of the angles in degrees are represented by p, q and r.*")
     
-    # Figure 6 - Embedded
-    st.markdown("### Figure 6: Triangle PQR")
-    display_figure_6()
+    # Figure 6
+    with st.container():
+        st.markdown("### Figure 6: Triangle PQR")
+        display_figure(6, "Triangle PQR", "figure_6.png")
     
     st.markdown("38. In Figure 6, if the measure of angle P is 30 degrees (that is, $p = 30$), which of the following are possible values for $q$ and $r$? **Choose 2 that are correct** among the choices. Note that the triangle is not drawn to scale.")
     st.multiselect("Options for Item 38:", [
@@ -620,9 +412,10 @@ with tabs[3]:
     st.subheader("Proportionality")
     st.markdown("*Carlos built a house for his dog, Brownie. The lower part of the dog house serves as a sleeping area, while a small portion on top is used for toy storage. The base of the toy storage, which measures 25 centimeters, is parallel to the floor. The dog house is triangular with sides in the ratio of 3:3:2. The shortest side measures 1 meter.*")
     
-    # Figure 7 - Embedded
-    st.markdown("### Figure 7: Dog House and Toy Storage")
-    display_figure_7()
+    # Figure 7
+    with st.container():
+        st.markdown("### Figure 7: Dog House and Toy Storage")
+        display_figure(7, "Dog House and Toy Storage", "figure_7.png")
     
     st.markdown("41. What are the lengths of the other two sides of the triangular dog house? [Refer to Figure 7] **(Select all that apply)**")
     st.multiselect("Options for Item 41:", [
@@ -647,12 +440,14 @@ with tabs[3]:
     st.subheader("Circles and Volumes")
     st.markdown("*A public park has a circular pool with a diameter of 10 meters. The park management decided to build a sidewalk around the pool to allow people to walk around it safely. The sidewalk has a uniform width of 1 meter all around the pool.*")
     
-    # Figures 8 and 9 - Embedded
-    st.markdown("### Figure 8: Circular Pool (top view)")
-    display_figure_8()
+    # Figures 8 and 9
+    with st.container():
+        st.markdown("### Figure 8: Circular Pool (top view)")
+        display_figure(8, "Circular Pool - Top View", "figure_8.png")
     
-    st.markdown("### Figure 9: Pool Depth (auxiliary view)")
-    display_figure_9()
+    with st.container():
+        st.markdown("### Figure 9: Pool Depth (auxiliary view)")
+        display_figure(9, "Pool Depth Diagram", "figure_9.png")
     
     st.markdown("44. What is the area of the sidewalk in square meters surrounding the pool? Show your solution. [Refer to Figure 8] Use $\\pi = 3.14$.")
     st.text_area("Solution for Item 44:", key="q44")
@@ -670,9 +465,10 @@ with tabs[3]:
     st.subheader("Rotation and Distance")
     st.markdown("*A wheel with a diameter of 60 cm is rolled along a straight path.*")
     
-    # Figure 10 - Embedded
-    st.markdown("### Figure 10: Rolling Wheel")
-    display_figure_10()
+    # Figure 10
+    with st.container():
+        st.markdown("### Figure 10: Rolling Wheel")
+        display_figure(10, "Rolling Wheel", "figure_10.png")
     
     st.markdown("46. The wheel in Figure 10 is rolled exactly 5 times. Show how you can compute the distance travelled by the wheel.")
     st.text_area("Solution for Item 46:", key="q46")

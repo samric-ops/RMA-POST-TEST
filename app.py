@@ -139,24 +139,24 @@ with tabs[0]:
     
     st.markdown("3. Which of the following algebraic expressions represents the set of number expressions in Box 1? **(Select all that apply)**")
     
-    # Professional mathematical formatting for Item 3
+    # Professional mathematical formatting for Item 3 exactly as requested
     st.markdown("""
     <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
         <p style="font-size: 16px; margin-bottom: 10px;"><b>Choose from the following options:</b></p>
         <ul style="list-style-type: none; padding-left: 0;">
-            <li style="margin-bottom: 10px;">a. \(n \cdot n - (n + 3)(n + 1)\)</li>
-            <li style="margin-bottom: 10px;">b. \(n \cdot n - [(n + 1)(n - 1)]\)</li>
-            <li style="margin-bottom: 10px;">c. \((n - 1)(n - 1) - n(n - 2)\)</li>
-            <li style="margin-bottom: 10px;">d. \(n^2 - 3n(1)\)</li>
-            <li style="margin-bottom: 10px;">e. \(n^2 - n - 1\)</li>
+            <li style="margin-bottom: 12px;">a. \( (n)(n) - (n + 3)(n + 1) \)</li>
+            <li style="margin-bottom: 12px;">b. \( (n)(n) - [(n + 1)(n - 1)] \)</li>
+            <li style="margin-bottom: 12px;">c. \( (n - 1)(n - 1) - n(n - 2) \)</li>
+            <li style="margin-bottom: 12px;">d. \( n^2 - 3n(1) \)</li>
+            <li style="margin-bottom: 12px;">e. \( n^2 - n - 1 \)</li>
         </ul>
     </div>
     """, unsafe_allow_html=True)
     
-    # Use regular text for the multiselect to avoid LaTeX rendering issues
+    # Simple text options for the multiselect widget
     st.multiselect("Select your answer(s):", [
-        "a. n·n - (n + 3)(n + 1)",
-        "b. n·n - [(n + 1)(n - 1)]", 
+        "a. (n)(n) - (n + 3)(n + 1)",
+        "b. (n)(n) - [(n + 1)(n - 1)]", 
         "c. (n - 1)(n - 1) - n(n - 2)",
         "d. n² - 3n(1)",
         "e. n² - n - 1"

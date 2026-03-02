@@ -31,31 +31,6 @@ st.markdown("""
         margin-top: 10px;
         color: #666;
     }
-    .professional-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-        font-size: 16px;
-        text-align: center;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    .professional-table th {
-        background-color: #4CAF50;
-        color: white;
-        font-weight: bold;
-        padding: 12px;
-        border: 1px solid #ddd;
-    }
-    .professional-table td {
-        padding: 10px;
-        border: 1px solid #ddd;
-    }
-    .professional-table tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
-    .professional-table tr:hover {
-        background-color: #e8f4f8;
-    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -180,46 +155,17 @@ with tabs[0]:
     st.divider()
     st.subheader("Powers and Rational Numbers")
     
-    # PROFESSIONAL TABLE 1 - Enhanced with proper exponential notation
-    st.write("**Table 1: Powers of 2**")
+    # SIMPLE AND CLEAN TABLE 1 - Exactly as requested
+    st.write("**Table 1**")
     
-    # Using HTML table for better control over formatting
     st.markdown("""
-    <table class="professional-table">
-        <thead>
-            <tr>
-                <th>Exponential Form</th>
-                <th>Expanded Form</th>
-                <th>Power of 2</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>\(2^2\)</td>
-                <td>\(2 \times 2\)</td>
-                <td>4</td>
-            </tr>
-            <tr>
-                <td>\(2^3\)</td>
-                <td>\(2 \times 2 \times 2\)</td>
-                <td>8</td>
-            </tr>
-            <tr>
-                <td>\(2^4\)</td>
-                <td>\(2 \times 2 \times 2 \times 2\)</td>
-                <td>16</td>
-            </tr>
-            <tr>
-                <td>\(2^5\)</td>
-                <td>\(2 \times 2 \times 2 \times 2 \times 2\)</td>
-                <td>32</td>
-            </tr>
-        </tbody>
-    </table>
-    """, unsafe_allow_html=True)
-    
-    # Add visual representation
-    st.info("📌 **Note:** The exponent indicates how many times the base (2) is multiplied by itself.")
+| Exponential Form | Expanded Form | Power of 2 |
+|---|---|---|
+| \( 2^2 \) | \( 2 \times 2 \) | 4 |
+| \( 2^3 \) | \( 2 \times 2 \times 2 \) | 8 |
+| \( 2^4 \) | \( 2 \times 2 \times 2 \times 2 \) | 16 |
+| \( 2^5 \) | \( 2 \times 2 \times 2 \times 2 \times 2 \) | 32 |
+    """)
     
     st.markdown("6. Show that 1024 is a power of 2. [Refer to Table 1]")
     st.text_area("Show solution for Item 6:", key="q6")
@@ -283,39 +229,14 @@ with tabs[1]:
     st.write("**Table 2: Music and Sports Activities Participation**")
     st.markdown("*Malaya High School organized music and sports activities to celebrate the school's foundation day. Table 2 shows the participation of the Grade 7 students.*")
     
-    # Professional Table 2
+    # Simple Table 2
     st.markdown("""
-    <table class="professional-table">
-        <thead>
-            <tr>
-                <th></th>
-                <th>Participated in sports</th>
-                <th>Did not participate in sports</th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><b>Participated in music</b></td>
-                <td>18</td>
-                <td>31</td>
-                <td>49</td>
-            </tr>
-            <tr>
-                <td><b>Did not participate in music</b></td>
-                <td>42</td>
-                <td>19</td>
-                <td>61</td>
-            </tr>
-            <tr>
-                <td><b>Total</b></td>
-                <td>60</td>
-                <td>50</td>
-                <td>110</td>
-            </tr>
-        </tbody>
-    </table>
-    """, unsafe_allow_html=True)
+| | Participated in sports | Did not participate in sports | Total |
+|---|---|---|---|
+| **Participated in music** | 18 | 31 | 49 |
+| **Did not participate in music** | 42 | 19 | 61 |
+| **Total** | 60 | 50 | 110 |
+    """)
     
     st.markdown("17. How many students participated in the music activity?")
     st.number_input("Count for Item 17:", step=1, key="q17")

@@ -259,8 +259,28 @@ with tabs[1]:
         st.markdown("*A number describes the position of a point on a number line. The picture below is part of a number line.*")
         display_figure(3, "Number Line", "figure_3.png")
     
-    st.markdown("21. What is the position of point F in Figure 3? **(Select all that apply)**")
-    st.multiselect("Options for Item 21:", ["a. -500", "b. -400", "c. -300", "d. -200", "e. 50"], key="q21")
+    st.markdown("21. What is the position of point \( F \) in Figure 3? **(Select all that apply)**")
+    
+    # UPDATED: Professional formatting for Item 21 choices
+    st.markdown("""
+    <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+        <ul style="list-style-type: none; padding-left: 0;">
+            <li style="margin-bottom: 10px;">a. Point \( F \) is at -500.</li>
+            <li style="margin-bottom: 10px;">b. Point \( F \) is at -400.</li>
+            <li style="margin-bottom: 10px;">c. Point \( F \) is at -300.</li>
+            <li style="margin-bottom: 10px;">d. Point \( F \) is at -200.</li>
+            <li style="margin-bottom: 10px;">e. Point \( F \) is at 50.</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.multiselect("Select your answer(s):", [
+        "a. Point F is at -500",
+        "b. Point F is at -400", 
+        "c. Point F is at -300",
+        "d. Point F is at -200",
+        "e. Point F is at 50"
+    ], key="q21")
     
     st.markdown("22. What is the position of point G in Figure 3?")
     st.text_input("Answer for Item 22:", key="q22")

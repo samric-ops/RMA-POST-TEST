@@ -31,6 +31,11 @@ st.markdown("""
         margin-top: 10px;
         color: #666;
     }
+    .math-option {
+        font-family: 'Courier New', monospace;
+        font-size: 16px;
+        padding: 5px 0;
+    }
     </style>
     """, unsafe_allow_html=True)
 
@@ -133,12 +138,28 @@ with tabs[0]:
     st.text_input("Answer for Item 2:", key="q2")
     
     st.markdown("3. Which of the following algebraic expressions represents the set of number expressions in Box 1? **(Select all that apply)**")
-    st.multiselect("Options for Item 3:", [
-        "a. (n)(n) - (n + 3)(n + 1)",
-        "b. (n)(n) - [(n + 1)(n - 1)]",
+    
+    # Professional mathematical formatting for Item 3
+    st.markdown("""
+    <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+        <p style="font-size: 16px; margin-bottom: 10px;"><b>Choose from the following options:</b></p>
+        <ul style="list-style-type: none; padding-left: 0;">
+            <li style="margin-bottom: 10px;">a. \(n \cdot n - (n + 3)(n + 1)\)</li>
+            <li style="margin-bottom: 10px;">b. \(n \cdot n - [(n + 1)(n - 1)]\)</li>
+            <li style="margin-bottom: 10px;">c. \((n - 1)(n - 1) - n(n - 2)\)</li>
+            <li style="margin-bottom: 10px;">d. \(n^2 - 3n(1)\)</li>
+            <li style="margin-bottom: 10px;">e. \(n^2 - n - 1\)</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Use regular text for the multiselect to avoid LaTeX rendering issues
+    st.multiselect("Select your answer(s):", [
+        "a. n·n - (n + 3)(n + 1)",
+        "b. n·n - [(n + 1)(n - 1)]", 
         "c. (n - 1)(n - 1) - n(n - 2)",
-        "d. n^2 - 3n(1)",
-        "e. n^2 - n - 1"
+        "d. n² - 3n(1)",
+        "e. n² - n - 1"
     ], key="q3")
     
     st.markdown("4. Explain or show why you think you have chosen the correct algebraic expressions for the set of number expressions in Box 1.")
@@ -150,14 +171,18 @@ with tabs[0]:
     st.divider()
     st.subheader("Powers and Rational Numbers")
     
-    # Table 1 from PDF
+    # Table 1 from PDF with professional formatting
     st.write("**Table 1: Powers of 2**")
-    table_data = {
-        "Exponential Form": ["2²", "2³", "2⁴", "2⁵"],
-        "Expanded Form": ["2 × 2", "2 × 2 × 2", "2 × 2 × 2 × 2", "2 × 2 × 2 × 2 × 2"],
-        "Power of 2": ["4", "8", "16", "32"]
-    }
-    st.table(table_data)
+    
+    # Use markdown table for better appearance
+    st.markdown("""
+    | Exponential Form | Expanded Form | Power of 2 |
+    |------------------|---------------|------------|
+    | \(2^2\) | \(2 \times 2\) | 4 |
+    | \(2^3\) | \(2 \times 2 \times 2\) | 8 |
+    | \(2^4\) | \(2 \times 2 \times 2 \times 2\) | 16 |
+    | \(2^5\) | \(2 \times 2 \times 2 \times 2 \times 2\) | 32 |
+    """)
     
     st.markdown("6. Show that 1024 is a power of 2. [Refer to Table 1]")
     st.text_area("Show solution for Item 6:", key="q6")
@@ -221,13 +246,14 @@ with tabs[1]:
     st.write("**Table 2: Music and Sports Activities Participation**")
     st.markdown("*Malaya High School organized music and sports activities to celebrate the school's foundation day. Table 2 shows the participation of the Grade 7 students.*")
     
-    # Table 2 from PDF
-    st.table({
-        "": ["Participated in music", "Did not participate in music", "Total"],
-        "Participated in sports": [18, 42, 60],
-        "Did not participate in sports": [31, 19, 50],
-        "Total": [49, 61, 110]
-    })
+    # Table 2 from PDF with professional formatting
+    st.markdown("""
+    | | Participated in sports | Did not participate in sports | Total |
+    |---|:---:|:---:|:---:|
+    | **Participated in music** | 18 | 31 | 49 |
+    | **Did not participate in music** | 42 | 19 | 61 |
+    | **Total** | 60 | 50 | 110 |
+    """)
     
     st.markdown("17. How many students participated in the music activity?")
     st.number_input("Count for Item 17:", step=1, key="q17")

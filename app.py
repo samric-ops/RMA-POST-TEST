@@ -338,11 +338,12 @@ with tabs[2]:
     st.text_input("Values for Item 31 (format: a, b):", key="q31")
     
     st.markdown("32. Which statement is always true about $a$ and $b$? [Refer to Box 2] **(Select all that apply)**")
+    # Removed dollar signs from options
     st.multiselect("Options for Item 32:", [
-        "a. $a$ is greater than $b$.",
-        "b. The sum of $a$ and $b$, $(a+b)$, is 20.",
-        "c. The difference between $b$ and $a$, $(b-a)$, is 14.",
-        "d. $a$ and $b$ can take any value."
+        "a. a is greater than b.",
+        "b. The sum of a and b, (a+b), is 20.",
+        "c. The difference between b and a, (b-a), is 14.",
+        "d. a and b can take any value."
     ], key="q32")
     
     st.markdown("33. Shown below is the solution to the given linear equation:")

@@ -261,9 +261,7 @@ with tabs[1]:
     
     st.markdown("21. What is the position of point \( F \) in Figure 3? **(Select all that apply)**")
     
-    # REMOVED: Ang duplicate na choices sa itaas
-    # Dropdown na lang ang natira
-    
+    # Dropdown only for Item 21
     st.multiselect("Select your answer(s):", [
         "a. Point F is at -500",
         "b. Point F is at -400", 
@@ -299,12 +297,13 @@ with tabs[2]:
     ], key="q24", max_selections=2)
     
     st.markdown("25. Draw a line through points A and B in Figure 4. Which of the following ordered pairs represent all the points that are on this line? **(Select all that apply)**")
+    # Removed dollar signs from options
     st.multiselect("Options for Item 25:", [
-        "a. $(x, -2x)$",
-        "b. $(x, -2x + 1)$",
-        "c. $(x, -x)$",
-        "d. $(x, -x + 1)$",
-        "e. $(x, -x + 2)$"
+        "a. (x, -2x)",
+        "b. (x, -2x + 1)",
+        "c. (x, -x)",
+        "d. (x, -x + 1)",
+        "e. (x, -x + 2)"
     ], key="q25")
     
     st.markdown("26. In Figure 4, connecting the points A, B and C will form a triangle, called triangle ABC. What is the area of triangle ABC? Show your method for getting the area.")

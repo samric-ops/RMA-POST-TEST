@@ -155,16 +155,16 @@ with tabs[0]:
     st.divider()
     st.subheader("Powers and Rational Numbers")
     
-    # SIMPLE AND CLEAN TABLE 1 - Professional exponential forms only
+    # SIMPLE AND CLEAN TABLE 1 - Using Unicode superscript for professional look
     st.write("**Table 1**")
     
     st.markdown("""
 | Exponential Form | Expanded Form | Power of 2 |
 |---|---|---|
-| \( 2^2 \) | 2 × 2 | 4 |
-| \( 2^3 \) | 2 × 2 × 2 | 8 |
-| \( 2^4 \) | 2 × 2 × 2 × 2 | 16 |
-| \( 2^5 \) | 2 × 2 × 2 × 2 × 2 | 32 |
+| 2² | 2 × 2 | 4 |
+| 2³ | 2 × 2 × 2 | 8 |
+| 2⁴ | 2 × 2 × 2 × 2 | 16 |
+| 2⁵ | 2 × 2 × 2 × 2 × 2 | 32 |
     """)
     
     st.markdown("6. Show that 1024 is a power of 2. [Refer to Table 1]")

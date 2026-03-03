@@ -7,7 +7,7 @@ st.set_page_config(page_title="Rapid Mathematics Assessment", page_icon="📝", 
 
 # --- CUSTOM CSS ---
 st.markdown("""
-    &lt;style&gt;
+    <style>
     .stTabs [data-baseweb="tab-list"] { gap: 10px; }
     .stTabs [data-baseweb="tab"] {
         height: 50px;
@@ -31,7 +31,7 @@ st.markdown("""
         margin-top: 10px;
         color: #666;
     }
-    &lt;/style&gt;
+    </style>
     """, unsafe_allow_html=True)
 
 # --- RESET SESSION STATE FOR ITEM 3 ---

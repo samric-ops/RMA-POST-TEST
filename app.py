@@ -1,9 +1,70 @@
 import streamlit as st
 from PIL import Image
 import os
+import datetime
 
 # --- APP CONFIG ---
 st.set_page_config(page_title="Rapid Mathematics Assessment", page_icon="📝", layout="wide")
+
+# --- CORRECT ANSWERS CONFIGURATION ---
+# Modify this dictionary with the actual correct answers.
+# For multiple-choice questions, store the answer as a list of the full option strings.
+# For text/number inputs, store as a string (case-insensitive comparison, spaces stripped).
+CORRECT_ANSWERS = {
+    # Items 1-11
+    "q1": "4×4−5×3 = 16−15 = 1",                 # example computation
+    "q2": "6×6−7×5",                              # next expression
+    "q3": ["b. (n)(n) - [(n + 1)(n - 1)]", "c. (n - 1)(n - 1) - n(n - 2)"],  # example correct
+    "q4": "Because when expanded, both give n² - (n² -1) = 1",  # explanation
+    "q5": "the first number in each expression (2,3,4,5...)",
+    "q6": "1024 = 2×2×2×2×2×2×2×2×2×2 = 2¹⁰",    # solution
+    "q7": "2¹⁰",
+    "q8": "64 or 128",                            # multiple of 16 between 50-200
+    "q9": "YES, 0.9985",
+    "q10": "0.999 - 0.998 = 0.001",
+    "q11": "YES, 7/8",
+    # Items 12-22
+    "q12": 5,                                      # number of students below 84
+    "q13": "I counted the points below 84 on the graph.",
+    "q14": ["b. As the number of absences decreases, the overall academic grade increases.",
+            "c. As the number of absences increases, the overall academic grade decreases."],
+    "q15": "Purok 2 shows more diversity because the income range is wider.",
+    "q16": "No, because the distribution is different; Purok 2 has more low-income families.",
+    "q17": 49,
+    "q18": 19,
+    "q19": "18/110 or 0.1636",
+    "q20": "How many students participated only in sports?",
+    "q21": ["c. Point F is at -300"],              # adjust as needed
+    "q22": "200",
+    # Items 23-33
+    "q23": "(3,2)",                                # example coordinates
+    "q24": ["d. (3, 2)", "f. (5, 6)"],             # exactly two
+    "q25": ["c. (x, -x)", "d. (x, -x + 1)"],       # all that apply
+    "q26": "Area = ½ × base × height = ...",
+    "q27": "school",
+    "q28": "Distance from house to school is shorter based on coordinates.",
+    "q29": ["-5", "-27", "99"],                     # odd integers
+    "q30": ["d. cost = 100n/3", "e. 3 : 100 = n : cost"],
+    "q31": "a=3, b=17",                             # example pair
+    "q32": ["c. The difference between b and a, (b-a), is 14."],
+    "q33": ["c. If we add 3y to both sides of equation ①, the equation will remain true."],
+    # Items 34-47
+    "q34": "1450",                                   # 250*5+200
+    "q35": ["a. The daily cost of renting the tricycle."],
+    "q36": "fixed cost / initial fee",
+    "q37": ["b. y-intercept"],
+    "q38": ["b. q = 10 and r = 130", "e. q = 100 and r = 50"],  # two correct
+    "q39": ["a. The sum of p and q is 130.", "d. The value of p is 50 and the value of q is 70."],
+    "q40": ["c. The exterior angle and one of the interior angles adjacent to it form a linear pair.",
+            "d. The measure of the exterior angle of a triangle is equal to the sum of the two remote interior angles."],
+    "q41": ["a. The other two sides are 1.5 meters each."],
+    "q42": "Yes, because the toy storage is similar to the dog house (parallel sides).",
+    "q43": ["a. The other two sides are 37.5 centimeters each."],
+    "q44": "Area = π(6²) - π(5²) = π(36-25) = 11π = 34.54 m²",
+    "q45": ["b. 25π(2.1) cubic meters"],            # correct expression(s)
+    "q46": "Distance = 5 × circumference = 5 × π × 60 cm = 300π cm",
+    "q47": "1800°",                                  # 5 rotations * 360°
+}
 
 # --- CUSTOM CSS ---
 st.markdown("""
@@ -60,9 +121,26 @@ def display_figure(figure_num, description, image_path=None):
 # --- SESSION STATE ---
 if 'responses' not in st.session_state:
     st.session_state.responses = {}
+# Initialize name fields if not present
+if 'surname' not in st.session_state:
+    st.session_state.surname = ""
+if 'given_name' not in st.session_state:
+    st.session_state.given_name = ""
+if 'middle_name' not in st.session_state:
+    st.session_state.middle_name = ""
 
 # --- HEADER ---
 st.title("Rapid Mathematics Assessment (Grades 7 - 10)")
+st.write("---")
+
+# Student Information
+col1, col2, col3 = st.columns(3)
+with col1:
+    st.text_input("Surname", key="surname")
+with col2:
+    st.text_input("Given Name", key="given_name")
+with col3:
+    st.text_input("Middle Name", key="middle_name")
 st.write("---")
 
 # Assessment Instructions from PDF
@@ -531,17 +609,102 @@ with tabs[3]:
     st.markdown("47. How many degrees did the wheel's pin rotate after 5 rolls? [Refer to Figure 10]")
     st.text_input("Answer for Item 47:", key="q47")
 
-# --- FOOTER ---
+# --- FOOTER: SUBMISSION, SCORING, AND DOWNLOAD ---
 st.divider()
+
+# Collect all question keys (q1 to q47)
+all_question_keys = [f"q{i}" for i in range(1, 48)]  # q1..q47
+
+# Ensure all keys exist in session_state (some may be missing if never answered)
+for key in all_question_keys:
+    if key not in st.session_state:
+        st.session_state[key] = "" if key not in ["q3","q14","q21","q24","q25","q29","q30","q32","q33","q35","q37","q38","q39","q40","q41","q43","q45"] else []
+
+# Scoring function
+def compute_score():
+    correct = 0
+    details = []
+    for q_key in all_question_keys:
+        user_ans = st.session_state.get(q_key, "")
+        correct_ans = CORRECT_ANSWERS.get(q_key, None)
+        if correct_ans is None:
+            # If no answer key defined, treat as not answered
+            details.append((q_key, user_ans, "No key", False))
+            continue
+
+        # Compare based on type
+        if isinstance(correct_ans, list):
+            # Multiselect: compare as sets after stripping
+            if isinstance(user_ans, list):
+                # Convert both to sets of stripped strings for comparison
+                user_set = set(str(item).strip() for item in user_ans if item)
+                correct_set = set(str(item).strip() for item in correct_ans)
+                is_correct = (user_set == correct_set)
+            else:
+                is_correct = False
+        else:
+            # Text/number: case-insensitive strip and compare
+            if isinstance(user_ans, str):
+                is_correct = (user_ans.strip().lower() == str(correct_ans).strip().lower())
+            elif isinstance(user_ans, (int, float)):
+                is_correct = (user_ans == correct_ans)
+            else:
+                is_correct = False
+
+        if is_correct:
+            correct += 1
+        details.append((q_key, user_ans, correct_ans, is_correct))
+    return correct, details
+
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     if st.button("✅ Complete Assessment", use_container_width=True):
-        st.balloons()
-        st.success("Responses submitted successfully!")
-        
-        # Show summary of responses
-        with st.expander("View Your Responses"):
-            responses = {k: v for k, v in st.session_state.items() if k.startswith('q')}
-            for key, value in responses.items():
-                if value:  # Only show non-empty responses
-                    st.write(f"**{key.upper()}:** {value}")
+        # Check if name fields are filled (optional)
+        if not st.session_state.surname or not st.session_state.given_name:
+            st.warning("Please enter your surname and given name before submitting.")
+        else:
+            st.balloons()
+            st.success("Responses submitted successfully!")
+            
+            # Compute score
+            score, details = compute_score()
+            total = len(all_question_keys)
+            percentage = (score / total) * 100
+            
+            # Display summary
+            st.subheader("📋 Assessment Summary")
+            st.write(f"**Student:** {st.session_state.surname}, {st.session_state.given_name} {st.session_state.middle_name}")
+            st.write(f"**Score:** {score} / {total}  ({percentage:.1f}%)")
+            
+            # Option to download results as text file
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"RMA_{st.session_state.surname}_{st.session_state.given_name}_{timestamp}.txt"
+            
+            # Build content for download
+            lines = []
+            lines.append("RAPID MATHEMATICS ASSESSMENT RESULTS")
+            lines.append("="*50)
+            lines.append(f"Student: {st.session_state.surname}, {st.session_state.given_name} {st.session_state.middle_name}")
+            lines.append(f"Date: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}")
+            lines.append(f"Score: {score} / {total} ({percentage:.1f}%)")
+            lines.append("="*50)
+            lines.append("\nDETAILED RESULTS:")
+            for q_key, user, correct, is_correct in details:
+                status = "✓" if is_correct else "✗"
+                lines.append(f"{q_key.upper()}: {status} | Your answer: {user} | Correct: {correct}")
+            lines.append("="*50)
+            content = "\n".join(lines)
+            
+            st.download_button(
+                label="📥 Download Summary as Text File",
+                data=content,
+                file_name=filename,
+                mime="text/plain"
+            )
+            
+            # Expandable detailed view
+            with st.expander("View Detailed Responses"):
+                for q_key, user, correct, is_correct in details:
+                    if user:  # only show non-empty
+                        mark = "✅" if is_correct else "❌"
+                        st.write(f"**{q_key.upper()}:** {mark}  \nYour answer: `{user}`  \nCorrect: `{correct}`")

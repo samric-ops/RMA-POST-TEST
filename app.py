@@ -347,8 +347,12 @@ with tabs[2]:
     ], key="q32")
     
     st.markdown("33. Shown below is the solution to the given linear equation:")
-    st.latex(r"5y - 8 = 14 - 3y \quad \text{(Equation ①)}")
-    st.latex(r"5y + 3y - 8 = 14 \quad \text{(Equation ②)}")
+    st.latex(r"5y - 8 = 14 - 3y \quad \text{---①}")
+    st.latex(r"5y + 3y - 8 = 14 \quad \text{---②}")
+    st.latex(r"8y - 8 = 14")
+    st.latex(r"8y = 14 + 8")
+    st.latex(r"8y = 22")
+    st.latex(r"y = \frac{11}{4} \text{ or } 2.75")
     st.markdown("What reason can we use to transform equation ① into equation ②? **(Select all that apply)**")
     st.multiselect("Options for Item 33:", [
         "a. If we subtract 3y from both sides of equation ①, the equation will remain true.",

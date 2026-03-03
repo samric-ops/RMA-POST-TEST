@@ -7,7 +7,7 @@ st.set_page_config(page_title="Rapid Mathematics Assessment", page_icon="📝", 
 
 # --- CUSTOM CSS ---
 st.markdown("""
-    <style>
+    &lt;style&gt;
     .stTabs [data-baseweb="tab-list"] { gap: 10px; }
     .stTabs [data-baseweb="tab"] {
         height: 50px;
@@ -31,7 +31,7 @@ st.markdown("""
         margin-top: 10px;
         color: #666;
     }
-    </style>
+    &lt;/style&gt;
     """, unsafe_allow_html=True)
 
 # --- RESET SESSION STATE FOR ITEM 3 ---
@@ -480,24 +480,52 @@ with tabs[3]:
     
     # Professional formatting with LaTeX for Item 45 - with proper fractions using \frac
     st.markdown("""
-    <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-        <ul style="list-style-type: none; padding-left: 0;">
-            <li style="margin-bottom: 10px;">a. \( 10\pi(2.1) \) cubic meters</li>
-            <li style="margin-bottom: 10px;">b. \( 25\pi(2.1) \) cubic meters</li>
-            <li style="margin-bottom: 10px;">c. \( \frac{10\pi(2.1)}{2} \) cubic meters</li>
-            <li style="margin-bottom: 10px;">d. \( \frac{25\pi(2.1)}{2} \) cubic meters</li>
-            <li style="margin-bottom: 10px;">e. \( \frac{100\pi(2.1)}{2} \) cubic meters</li>
-        </ul>
-    </div>
+    &lt;div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;"&gt;
+        &lt;ul style="list-style-type: none; padding-left: 0;"&gt;
+            &lt;li style="margin-bottom: 10px;"&gt;a. \( 10\pi(2.1) \) cubic meters&lt;/li&gt;
+            &lt;li style="margin-bottom: 10px;"&gt;b. \( 25\pi(2.1) \) cubic meters&lt;/li&gt;
+            &lt;li style="margin-bottom: 10px;"&gt;c. \( \frac{10\pi(2.1)}{2} \) cubic meters&lt;/li&gt;
+            &lt;li style="margin-bottom: 10px;"&gt;d. \( \frac{25\pi(2.1)}{2} \) cubic meters&lt;/li&gt;
+            &lt;li style="margin-bottom: 10px;"&gt;e. \( \frac{100\pi(2.1)}{2} \) cubic meters&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/div&gt;
     """, unsafe_allow_html=True)
-    
-    st.multiselect("Select your answer(s):", [
-        "a. 10π(2.1) cubic meters",
-        "b. 25π(2.1) cubic meters",
-        "c. (10π(2.1))/2 cubic meters",
-        "d. (25π(2.1))/2 cubic meters",
-        "e. (100π(2.1))/2 cubic meters"
-    ], key="q45")
+
+    # --- NEW: Professional, LaTeX-rendered selectable choices for Item 45 ---
+    st.caption("Pumili ng lahat ng tamang sagot:")
+
+    # Initialize individual checkbox states if not yet present
+    if "q45_a" not in st.session_state: st.session_state["q45_a"] = False
+    if "q45_b" not in st.session_state: st.session_state["q45_b"] = False
+    if "q45_c" not in st.session_state: st.session_state["q45_c"] = False
+    if "q45_d" not in st.session_state: st.session_state["q45_d"] = False
+    if "q45_e" not in st.session_state: st.session_state["q45_e"] = False
+
+    # Helper to draw one choice with a checkbox + LaTeX formula on the same row
+    def latex_choice(letter_key: str, label_letter: str, latex_expr: str):
+        cols = st.columns([0.12, 0.88])
+        with cols[0]:
+            st.checkbox(label_letter, key=letter_key)
+        with cols[1]:
+            st.latex(latex_expr)
+            st.caption("cubic meters")
+
+    # Render each choice (C, D, E use proper \\frac for numerator/denominator)
+    latex_choice("q45_a", "a.", r"10\pi(2.1)")
+    latex_choice("q45_b", "b.", r"25\pi(2.1)")
+    latex_choice("q45_c", "c.", r"\frac{10\pi(2.1)}{2}")
+    latex_choice("q45_d", "d.", r"\frac{25\pi(2.1)}{2}")
+    latex_choice("q45_e", "e.", r"\frac{100\pi(2.1)}{2}")
+
+    # Mirror selections into the same key used by your response summary ("q45")
+    selected_q45 = []
+    if st.session_state["q45_a"]: selected_q45.append("a. 10π(2.1) cubic meters")
+    if st.session_state["q45_b"]: selected_q45.append("b. 25π(2.1) cubic meters")
+    if st.session_state["q45_c"]: selected_q45.append("c. (10π(2.1))/2 cubic meters")
+    if st.session_state["q45_d"]: selected_q45.append("d. (25π(2.1))/2 cubic meters")
+    if st.session_state["q45_e"]: selected_q45.append("e. (100π(2.1))/2 cubic meters")
+
+    st.session_state["q45"] = selected_q45
     
     st.divider()
     st.subheader("Rotation and Distance")

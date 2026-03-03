@@ -494,9 +494,9 @@ with tabs[3]:
     st.multiselect("Select your answer(s):", [
         "a. 10π(2.1) cubic meters",
         "b. 25π(2.1) cubic meters",
-        "c. (10π(2.1))/2 cubic meters",
-        "d. (25π(2.1))/2 cubic meters",
-        "e. (100π(2.1))/2 cubic meters"
+        "c. 10π(2.1)/2 cubic meters",
+        "d. 25π(2.1)/2 cubic meters",
+        "e. 100π(2.1)/2 cubic meters"
     ], key="q45")
     
     st.divider()

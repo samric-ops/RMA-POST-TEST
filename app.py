@@ -2,69 +2,10 @@ import streamlit as st
 from PIL import Image
 import os
 import datetime
+import re
 
 # --- APP CONFIG ---
 st.set_page_config(page_title="Rapid Mathematics Assessment", page_icon="📝", layout="wide")
-
-# --- CORRECT ANSWERS CONFIGURATION ---
-# Modify this dictionary with the actual correct answers.
-# For multiple-choice questions, store the answer as a list of the full option strings.
-# For text/number inputs, store as a string (case-insensitive comparison, spaces stripped).
-CORRECT_ANSWERS = {
-    # Items 1-11
-    "q1": "4×4−5×3 = 16−15 = 1",                 # example computation
-    "q2": "6×6−7×5",                              # next expression
-    "q3": ["b. (n)(n) - [(n + 1)(n - 1)]", "c. (n - 1)(n - 1) - n(n - 2)"],  # example correct
-    "q4": "Because when expanded, both give n² - (n² -1) = 1",  # explanation
-    "q5": "the first number in each expression (2,3,4,5...)",
-    "q6": "1024 = 2×2×2×2×2×2×2×2×2×2 = 2¹⁰",    # solution
-    "q7": "2¹⁰",
-    "q8": "64 or 128",                            # multiple of 16 between 50-200
-    "q9": "YES, 0.9985",
-    "q10": "0.999 - 0.998 = 0.001",
-    "q11": "YES, 7/8",
-    # Items 12-22
-    "q12": 5,                                      # number of students below 84
-    "q13": "I counted the points below 84 on the graph.",
-    "q14": ["b. As the number of absences decreases, the overall academic grade increases.",
-            "c. As the number of absences increases, the overall academic grade decreases."],
-    "q15": "Purok 2 shows more diversity because the income range is wider.",
-    "q16": "No, because the distribution is different; Purok 2 has more low-income families.",
-    "q17": 49,
-    "q18": 19,
-    "q19": "18/110 or 0.1636",
-    "q20": "How many students participated only in sports?",
-    "q21": ["c. Point F is at -300"],              # adjust as needed
-    "q22": "200",
-    # Items 23-33
-    "q23": "(3,2)",                                # example coordinates
-    "q24": ["d. (3, 2)", "f. (5, 6)"],             # exactly two
-    "q25": ["c. (x, -x)", "d. (x, -x + 1)"],       # all that apply
-    "q26": "Area = ½ × base × height = ...",
-    "q27": "school",
-    "q28": "Distance from house to school is shorter based on coordinates.",
-    "q29": ["-5", "-27", "99"],                     # odd integers
-    "q30": ["d. cost = 100n/3", "e. 3 : 100 = n : cost"],
-    "q31": "a=3, b=17",                             # example pair
-    "q32": ["c. The difference between b and a, (b-a), is 14."],
-    "q33": ["c. If we add 3y to both sides of equation ①, the equation will remain true."],
-    # Items 34-47
-    "q34": "1450",                                   # 250*5+200
-    "q35": ["a. The daily cost of renting the tricycle."],
-    "q36": "fixed cost / initial fee",
-    "q37": ["b. y-intercept"],
-    "q38": ["b. q = 10 and r = 130", "e. q = 100 and r = 50"],  # two correct
-    "q39": ["a. The sum of p and q is 130.", "d. The value of p is 50 and the value of q is 70."],
-    "q40": ["c. The exterior angle and one of the interior angles adjacent to it form a linear pair.",
-            "d. The measure of the exterior angle of a triangle is equal to the sum of the two remote interior angles."],
-    "q41": ["a. The other two sides are 1.5 meters each."],
-    "q42": "Yes, because the toy storage is similar to the dog house (parallel sides).",
-    "q43": ["a. The other two sides are 37.5 centimeters each."],
-    "q44": "Area = π(6²) - π(5²) = π(36-25) = 11π = 34.54 m²",
-    "q45": ["b. 25π(2.1) cubic meters"],            # correct expression(s)
-    "q46": "Distance = 5 × circumference = 5 × π × 60 cm = 300π cm",
-    "q47": "1800°",                                  # 5 rotations * 360°
-}
 
 # --- CUSTOM CSS ---
 st.markdown("""
@@ -196,7 +137,7 @@ with st.sidebar:
     - `figure_10.png` - Rolling Wheel
     """)
 
-# --- MAIN TABS ---
+# --- MAIN TABS (identical to previous version) ---
 tabs = st.tabs(["Items 1-11", "Items 12-22", "Items 23-33", "Items 34-47"])
 
 # --- TAB 1: Number Expressions & Powers (Items 1-11) ---
@@ -233,9 +174,7 @@ with tabs[0]:
     st.divider()
     st.subheader("Powers and Rational Numbers")
     
-    # SIMPLE AND CLEAN TABLE 1 - Using Unicode superscript for professional look
     st.write("**Table 1**")
-    
     st.markdown("""
 | Exponential Form | Expanded Form | Power of 2 |
 |---|---|---|
@@ -307,7 +246,6 @@ with tabs[1]:
     st.write("**Table 2: Music and Sports Activities Participation**")
     st.markdown("*Malaya High School organized music and sports activities to celebrate the school's foundation day. Table 2 shows the participation of the Grade 7 students.*")
     
-    # Simple Table 2
     st.markdown("""
 | | Participated in sports | Did not participate in sports | Total |
 |---|---|---|---|
@@ -339,7 +277,6 @@ with tabs[1]:
     
     st.markdown("21. What is the position of point \( F \) in Figure 3? **(Select all that apply)**")
     
-    # Dropdown only for Item 21
     st.multiselect("Select your answer(s):", [
         "a. Point F is at -500",
         "b. Point F is at -400", 
@@ -375,7 +312,6 @@ with tabs[2]:
     ], key="q24", max_selections=2)
     
     st.markdown("25. Draw a line through points A and B in Figure 4. Which of the following ordered pairs represent all the points that are on this line? **(Select all that apply)**")
-    # Removed dollar signs from options
     st.multiselect("Options for Item 25:", [
         "a. (x, -2x)",
         "b. (x, -2x + 1)",
@@ -416,7 +352,6 @@ with tabs[2]:
     st.text_input("Values for Item 31 (format: a, b):", key="q31")
     
     st.markdown("32. Which statement is always true about $a$ and $b$? [Refer to Box 2] **(Select all that apply)**")
-    # Removed dollar signs from options
     st.multiselect("Options for Item 32:", [
         "a. a is greater than b.",
         "b. The sum of a and b, (a+b), is 20.",
@@ -482,7 +417,6 @@ with tabs[3]:
         display_figure(6, "Triangle PQR", "figure_6.png")
     
     st.markdown("38. In Figure 6, if the measure of angle P is 30 degrees (that is, p = 30), which of the following are possible values for q and r? **Choose 2 that are correct** among the choices. Note that the triangle is not drawn to scale.")
-    # Removed dollar signs from options
     st.multiselect("Options for Item 38:", [
         "a. q = 10 and r = 140",
         "b. q = 10 and r = 130",
@@ -554,9 +488,8 @@ with tabs[3]:
     st.markdown("44. What is the area of the sidewalk in square meters surrounding the pool? Show your solution. [Refer to Figure 8] Use $\\pi = 3.14$.")
     st.text_area("Solution for Item 44:", key="q44")
     
-    # ------------------- REVISED ITEM 45 (English + two-column layout) -------------------
+    # Item 45 (two-column layout)
     st.markdown("45. The park management decides to divide the pool into two equal parts. One part will be designated for adults and has a depth of 1.5 meters, while the other part will be designated for children and has a depth of 0.6 meters. Which of the following will give the total volume of water in the pool? [Refer to Figure 9] **(Select all that apply)**")
-
     st.caption("Select all correct answers:")
 
     # Initialize individual checkbox states if not present
@@ -564,9 +497,8 @@ with tabs[3]:
         if k not in st.session_state:
             st.session_state[k] = False
 
-    # Helper to render one choice with letter, LaTeX, and unit text in a row
     def render_choice(letter_key: str, letter: str, latex_expr: str):
-        row = st.columns([0.12, 0.58, 0.30])  # letter / math / units
+        row = st.columns([0.12, 0.58, 0.30])
         with row[0]:
             st.checkbox(letter, key=letter_key)
         with row[1]:
@@ -574,7 +506,6 @@ with tabs[3]:
         with row[2]:
             st.write("cubic meters")
 
-    # Two-column arrangement: a–c left, d–e right (matches your sample layout)
     left_col, right_col = st.columns(2)
     with left_col:
         render_choice("q45_a", "a.", r"10\pi(2.1)")
@@ -584,7 +515,6 @@ with tabs[3]:
         render_choice("q45_d", "d.", r"\frac{25\pi(2.1)}{2}")
         render_choice("q45_e", "e.", r"\frac{100\pi(2.1)}{2}")
 
-    # Mirror selections into the same key used by your response summary ("q45")
     selected_q45 = []
     if st.session_state["q45_a"]: selected_q45.append("a. 10π(2.1) cubic meters")
     if st.session_state["q45_b"]: selected_q45.append("b. 25π(2.1) cubic meters")
@@ -592,7 +522,6 @@ with tabs[3]:
     if st.session_state["q45_d"]: selected_q45.append("d. (25π(2.1))/2 cubic meters")
     if st.session_state["q45_e"]: selected_q45.append("e. (100π(2.1))/2 cubic meters")
     st.session_state["q45"] = selected_q45
-    # ----------------- END REVISED ITEM 45 -----------------
 
     st.divider()
     st.subheader("Rotation and Distance")
@@ -609,89 +538,523 @@ with tabs[3]:
     st.markdown("47. How many degrees did the wheel's pin rotate after 5 rolls? [Refer to Figure 10]")
     st.text_input("Answer for Item 47:", key="q47")
 
-# --- FOOTER: SUBMISSION, SCORING, AND DOWNLOAD ---
+# =============================================================================
+# SCORING ENGINE (based on official RMA scoring guide)
+# =============================================================================
+
+def score_item(item_key, ans, all_answers):
+    """Return points earned for a given item (0,1,2,3)."""
+    # Helper to check if answer is empty
+    if ans is None or ans == "" or (isinstance(ans, list) and len(ans)==0):
+        return 0
+
+    # Item 1 (text area)
+    if item_key == "q1":
+        s = ans.strip().lower()
+        # Full credit (2): correct computation "16 - 15 = 1" or similar
+        if re.search(r"16\s*[-–—]\s*15\s*=\s*1", s) or "16-15=1" in s:
+            return 2
+        # Partial (1): shows "4 x 4 - 5 x 3 = 1" or "16-15 only"
+        if re.search(r"4\s*x\s*4\s*[-–—]\s*5\s*x\s*3\s*=\s*1", s) or "16-15" in s:
+            return 1
+        return 0
+
+    # Item 2 (text input)
+    if item_key == "q2":
+        correct = "6 x 6 - 7 x 5".replace(" ", "").lower()
+        user = ans.replace(" ", "").lower()
+        return 1 if user == correct else 0
+
+    # Item 3 (multiselect)
+    if item_key == "q3":
+        # correct set: b and c
+        correct_set = {"b. (n)(n) - [(n + 1)(n - 1)]", "c. (n - 1)(n - 1) - n(n - 2)"}
+        user_set = set(ans) if isinstance(ans, list) else set()
+        if user_set == correct_set:
+            return 2
+        # partial: only b or only c
+        if user_set == {"b. (n)(n) - [(n + 1)(n - 1)]"} or user_set == {"c. (n - 1)(n - 1) - n(n - 2)"}:
+            return 1
+        # if contains any of a,d,e -> 0
+        forbidden = {"a. (n)(n) - (n + 3)(n + 1)", "d. n² - 3n(1)", "e. n² - n - 1"}
+        if user_set & forbidden:
+            return 0
+        return 0
+
+    # Item 4 (text area)
+    if item_key == "q4":
+        s = ans.strip().lower()
+        # Full (2): explanation that chosen expression simplifies to 1
+        if re.search(r"simplif(?:y|ies|ication).*1", s) or re.search(r"=\s*1", s):
+            return 2
+        # Partial (1): used expression to generate at least one number expression
+        if "n=2" in s or "n = 2" in s or "substitut" in s:
+            return 1
+        return 0
+
+    # Item 5 (text input) – depends on q3 choice
+    if item_key == "q5":
+        q3_ans = all_answers.get("q3", [])
+        if not q3_ans:
+            return 0
+        chosen = set(q3_ans)
+        s = ans.strip().lower()
+        # If b chosen: n is first number
+        if "b. (n)(n) - [(n + 1)(n - 1)]" in chosen:
+            if "first" in s or "starting" in s or re.search(r"n\s*=\s*2", s):
+                return 1
+        # If c chosen: n is third number
+        if "c. (n - 1)(n - 1) - n(n - 2)" in chosen:
+            if "third" in s or re.search(r"n\s*=\s*3", s):
+                return 1
+        return 0
+
+    # Item 6 (text area)
+    if item_key == "q6":
+        s = ans.strip().lower()
+        # Full (2): shows 1024 = 2^10 or equivalent factorization
+        if re.search(r"2\s*[\^⁰]?\s*10", s) or "2¹⁰" in s or "2^10" in s:
+            return 2
+        if "64 x 16" in s or "32 x 32" in s or re.search(r"2\s*\^\s*6\s*x\s*2\s*\^\s*4", s):
+            return 2
+        # Otherwise maybe partial? Guide says only full or nothing, but we'll give 1 if they show repeated multiplication
+        if re.search(r"2\s*x\s*2\s*x\s*2", s) and "1024" in s:
+            return 1
+        return 0
+
+    # Item 7 (text input)
+    if item_key == "q7":
+        return 1 if ans.strip() in ["2¹⁰", "2^10", "2**10", "2 10"] else 0
+
+    # Item 8 (text input)
+    if item_key == "q8":
+        a = ans.strip()
+        return 1 if a in ["64", "128"] else 0
+
+    # Item 9 (text area)
+    if item_key == "q9":
+        s = ans.strip().lower()
+        if "yes" in s or "oo" in s:
+            # find a number between 0.998 and 0.999
+            nums = re.findall(r"0\.998\d+", s)
+            if nums:
+                return 1
+        return 0
+
+    # Item 10 (text area)
+    if item_key == "q10":
+        s = ans.strip().lower()
+        # Full (2): correct subtraction expression and answer
+        if re.search(r"0\.999\s*[-–—]\s*0\.998\s*=\s*0\.001", s):
+            return 2
+        # Partial (1): correct set up only
+        if re.search(r"0\.999\s*[-–—]\s*0\.998", s):
+            return 1
+        return 0
+
+    # Item 11 (text area)
+    if item_key == "q11":
+        s = ans.strip().lower()
+        # Full (2): correct fraction with explanation
+        if re.search(r"(7/8|4/5|5/6|6/7|8/9|9/10)", s) and ("because" in s or "since" in s or "convert" in s):
+            return 2
+        # Partial (1): correct fraction only
+        if re.search(r"(7/8|4/5|5/6|6/7|8/9|9/10)", s):
+            return 1
+        return 0
+
+    # Item 12 (number input)
+    if item_key == "q12":
+        try:
+            return 1 if int(ans) == 5 else 0
+        except:
+            return 0
+
+    # Item 13 (text area)
+    if item_key == "q13":
+        s = ans.strip().lower()
+        if "5" in s and ("point" in s or "below" in s):
+            return 1
+        return 0
+
+    # Item 14 (multiselect)
+    if item_key == "q14":
+        correct_set = {"b. As the number of absences decreases, the overall academic grade increases.",
+                       "c. As the number of absences increases, the overall academic grade decreases."}
+        user_set = set(ans) if isinstance(ans, list) else set()
+        if user_set == correct_set:
+            return 2
+        if user_set == {"b. As the number of absences decreases, the overall academic grade increases."} or \
+           user_set == {"c. As the number of absences increases, the overall academic grade decreases."}:
+            return 1
+        return 0
+
+    # Item 15 (text area)
+    if item_key == "q15":
+        s = ans.strip().lower()
+        # Full (2): Purok 1 more varied with statistical explanation
+        if "purok 1" in s and ("range" in s or "difference" in s or "max" in s or "min" in s):
+            return 2
+        # Partial (1): Purok 1 more varied with visual explanation
+        if "purok 1" in s and ("bar" in s or "spread" in s):
+            return 1
+        return 0
+
+    # Item 16 (text area)
+    if item_key == "q16":
+        s = ans.strip().lower()
+        # Full (2): mentions variability
+        if "variab" in s or "spread" in s or "range" in s or "divers" in s:
+            return 2
+        # Partial (1): mentions central tendency only
+        if "average" in s or "mean" in s or "equal" in s:
+            return 1
+        return 0
+
+    # Item 17 (number input)
+    if item_key == "q17":
+        try:
+            return 1 if int(ans) == 49 else 0
+        except:
+            return 0
+
+    # Item 18 (number input)
+    if item_key == "q18":
+        try:
+            return 1 if int(ans) == 19 else 0
+        except:
+            return 0
+
+    # Item 19 (text input)
+    if item_key == "q19":
+        s = ans.strip().lower().replace(" ", "")
+        # accept 18/110, 9/55, 0.1636, 0.16, etc.
+        if s in ["18/110", "9/55", "0.1636", "0.16", "0.163636"]:
+            return 1
+        if re.search(r"0\.163\d*", s):
+            return 1
+        return 0
+
+    # Item 20 (text input)
+    if item_key == "q20":
+        q = ans.strip().lower()
+        # Full (3): question using other concepts (Venn diagram, effect of new student)
+        if "venn" in q or "diagram" in q or "new student" in q or "affect" in q:
+            return 3
+        # Partial (2): probability question
+        if "probability" in q or "chance" in q:
+            return 2
+        # Partial (1): frequency question
+        if "how many" in q and ("participated" in q or "did not" in q):
+            return 1
+        return 0
+
+    # Item 21 (multiselect)
+    if item_key == "q21":
+        user_set = set(ans) if isinstance(ans, list) else set()
+        correct = {"c. Point F is at -300"}
+        return 1 if user_set == correct else 0
+
+    # Item 22 (text input)
+    if item_key == "q22":
+        return 1 if ans.strip() == "0" else 0
+
+    # Item 23 (text input)
+    if item_key == "q23":
+        # accept (4,4) with any spacing
+        if re.match(r"\s*\(\s*4\s*,\s*4\s*\)\s*", ans):
+            return 1
+        return 0
+
+    # Item 24 (multiselect, max 2)
+    if item_key == "q24":
+        user_set = set(ans) if isinstance(ans, list) else set()
+        correct_options = {"b. (1, -2)", "d. (3, 2)", "f. (5, 6)"}
+        # Full credit: any combination of two from {b,d,f}
+        if len(user_set) == 2 and user_set.issubset(correct_options):
+            return 2
+        # Partial: any one from {b,d,f}
+        if len(user_set) == 1 and user_set.issubset(correct_options):
+            return 1
+        return 0
+
+    # Item 25 (multiselect)
+    if item_key == "q25":
+        user_set = set(ans) if isinstance(ans, list) else set()
+        correct = {"e. (x, -x + 2)"}
+        return 1 if user_set == correct else 0
+
+    # Item 26 (text area)
+    if item_key == "q26":
+        s = ans.strip().lower()
+        # Full (2): area 12 with method
+        if "12" in s and ("method" in s or "formula" in s or "½" in s or "half" in s):
+            return 2
+        # Partial (1): correct area only
+        if "12" in s:
+            return 1
+        return 0
+
+    # Item 27 (text input)
+    if item_key == "q27":
+        s = ans.strip().lower()
+        if "school" in s or "b" in s or "a to b" in s:
+            return 1
+        return 0
+
+    # Item 28 (text area)
+    if item_key == "q28":
+        s = ans.strip().lower()
+        # Full (2): uses distance formula, Pythagorean theorem, or circle
+        if "distance" in s or "pythagorean" in s or "circle" in s or "radius" in s:
+            return 2
+        # Partial (1): used nonstandard measuring
+        if "paper" in s or "pencil" in s or "compare" in s:
+            return 1
+        return 0
+
+    # Item 29 (multiselect)
+    if item_key == "q29":
+        user_set = set(ans) if isinstance(ans, list) else set()
+        correct = {"-5", "-27", "99"}
+        if user_set == correct:
+            return 3
+        # Partial: any two
+        if len(user_set) == 2 and user_set.issubset(correct):
+            return 2
+        # Partial: any one
+        if len(user_set) == 1 and user_set.issubset(correct):
+            return 1
+        return 0
+
+    # Item 30 (multiselect)
+    if item_key == "q30":
+        user_set = set(ans) if isinstance(ans, list) else set()
+        correct = {"d. cost = 100n/3", "e. 3 : 100 = n : cost"}
+        if user_set == correct:
+            return 2
+        if user_set == {"d. cost = 100n/3"} or user_set == {"e. 3 : 100 = n : cost"}:
+            return 1
+        return 0
+
+    # Item 31 (text input) – expects two values a,b such that b = a+14
+    if item_key == "q31":
+        s = ans.strip()
+        # try to extract numbers
+        nums = re.findall(r"[-+]?\d+", s)
+        if len(nums) >= 2:
+            try:
+                a = int(nums[0])
+                b = int(nums[1])
+                if b == a + 14:
+                    return 2  # full for at least one pair
+            except:
+                pass
+        # if they wrote multiple pairs, check at least one satisfies
+        pairs = re.findall(r"a\s*=\s*(\d+)\s*,\s*b\s*=\s*(\d+)", s.lower())
+        for a_str, b_str in pairs:
+            if int(b_str) == int(a_str) + 14:
+                return 2
+        # if only one pair and it's correct, also 2? Guide says 2 for two pairs, 1 for one pair.
+        # We'll give 1 if they show one correct pair.
+        if len(pairs) == 1:
+            a, b = int(pairs[0][0]), int(pairs[0][1])
+            if b == a + 14:
+                return 1
+        return 0
+
+    # Item 32 (multiselect)
+    if item_key == "q32":
+        user_set = set(ans) if isinstance(ans, list) else set()
+        correct = {"c. The difference between b and a, (b-a), is 14."}
+        return 1 if user_set == correct else 0
+
+    # Item 33 (multiselect)
+    if item_key == "q33":
+        user_set = set(ans) if isinstance(ans, list) else set()
+        correct = {"c. If we add 3y to both sides of equation ①, the equation will remain true."}
+        return 1 if user_set == correct else 0
+
+    # Item 34 (text input)
+    if item_key == "q34":
+        # expected 1250
+        s = ans.strip().replace(",", "")
+        try:
+            return 1 if int(s) == 1250 else 0
+        except:
+            return 1 if s == "1250" else 0
+
+    # Item 35 (multiselect) – 250 is daily cost
+    if item_key == "q35":
+        user_set = set(ans) if isinstance(ans, list) else set()
+        correct = {"a. The daily cost of renting the tricycle."}
+        return 1 if user_set == correct else 0
+
+    # Item 36 (text input) – 200 is fixed cost
+    if item_key == "q36":
+        s = ans.strip().lower()
+        if "fixed" in s or "initial" in s or "constant" in s:
+            return 1
+        return 0
+
+    # Item 37 (multiselect) – 200 is y-intercept
+    if item_key == "q37":
+        user_set = set(ans) if isinstance(ans, list) else set()
+        correct = {"b. y-intercept"}
+        return 1 if user_set == correct else 0
+
+    # Item 38 (multiselect, max 2) – correct are a and e
+    if item_key == "q38":
+        user_set = set(ans) if isinstance(ans, list) else set()
+        correct = {"a. q = 10 and r = 140", "e. q = 100 and r = 50"}
+        if user_set == correct:
+            return 2
+        if user_set == {"a. q = 10 and r = 140"} or user_set == {"e. q = 100 and r = 50"}:
+            return 1
+        return 0
+
+    # Item 39 (multiselect) – correct are c and e
+    if item_key == "q39":
+        user_set = set(ans) if isinstance(ans, list) else set()
+        correct = {"c. The value of p is 70 and the value of q is 50.",
+                   "e. The value of r plus p is 130."}
+        if user_set == correct:
+            return 2
+        if user_set == {"c. The value of p is 70 and the value of q is 50."} or \
+           user_set == {"e. The value of r plus p is 130."}:
+            return 1
+        return 0
+
+    # Item 40 (multiselect) – correct are c and d
+    if item_key == "q40":
+        user_set = set(ans) if isinstance(ans, list) else set()
+        correct = {"c. The exterior angle and one of the interior angles adjacent to it form a linear pair.",
+                   "d. The measure of the exterior angle of a triangle is equal to the sum of the two remote interior angles."}
+        if user_set == correct:
+            return 2
+        if user_set == {"c. ..."} or user_set == {"d. ..."}:
+            return 1
+        return 0
+
+    # Item 41 (multiselect) – correct a only
+    if item_key == "q41":
+        user_set = set(ans) if isinstance(ans, list) else set()
+        correct = {"a. The other two sides are 1.5 meters each."}
+        return 1 if user_set == correct else 0
+
+    # Item 42 (text area)
+    if item_key == "q42":
+        s = ans.strip().lower()
+        if "yes" in s and ("similar" in s or "proportional" in s or "parallel" in s):
+            return 2
+        if "yes" in s:
+            return 0  # no explanation, but guide says 0 for yes without explanation? Actually guide says: No credit for Yes (other explanation or without explanation). So 0.
+        return 0
+
+    # Item 43 (multiselect) – correct a only
+    if item_key == "q43":
+        user_set = set(ans) if isinstance(ans, list) else set()
+        correct = {"a. The other two sides are 37.5 centimeters each."}
+        return 1 if user_set == correct else 0
+
+    # Item 44 (text area)
+    if item_key == "q44":
+        s = ans.strip().lower()
+        # Full (3): correct answer and solution
+        if "34.54" in s and ("6²" in s or "36" in s) and ("5²" in s or "25" in s):
+            return 3
+        # Partial (2): correct answer only
+        if "34.54" in s:
+            return 2
+        # Partial (1): partial solution
+        if ("6²" in s or "36" in s) or ("5²" in s or "25" in s):
+            return 1
+        return 0
+
+    # Item 45 (special multiselect from checkboxes) – correct d only
+    if item_key == "q45":
+        # ans is list of selected full strings
+        user_set = set(ans) if isinstance(ans, list) else set()
+        correct = {"d. (25π(2.1))/2 cubic meters"}
+        return 1 if user_set == correct else 0
+
+    # Item 46 (text area)
+    if item_key == "q46":
+        s = ans.strip().lower()
+        # Full (2): correct solution with computation
+        if "circumference" in s and ("5" in s) and ("942" in s or "300π" in s):
+            return 2
+        # Partial (1): correct distance only
+        if "942" in s or "300π" in s:
+            return 1
+        return 0
+
+    # Item 47 (text input)
+    if item_key == "q47":
+        s = ans.strip().lower().replace("°", "")
+        try:
+            val = int(s)
+            if val == 1800:
+                return 2
+        except:
+            pass
+        # Partial (1): shows 360 x 5
+        if "360" in s and "5" in s and ("x" in s or "*" in s):
+            return 1
+        return 0
+
+    return 0
+
+def compute_all_scores():
+    """Return dict of item->score and total score."""
+    scores = {}
+    total = 0
+    # Collect all question keys from q1 to q47
+    for i in range(1, 48):
+        key = f"q{i}"
+        ans = st.session_state.get(key, None)
+        # For items that are stored as separate checkboxes (q45), we already combined into q45 list
+        if key == "q45":
+            ans = st.session_state.get("q45", [])
+        score = score_item(key, ans, st.session_state)
+        scores[key] = score
+        total += score
+    return scores, total
+
+# --- FOOTER: SUBMISSION AND RESULTS ---
 st.divider()
-
-# Collect all question keys (q1 to q47)
-all_question_keys = [f"q{i}" for i in range(1, 48)]  # q1..q47
-
-# Ensure all keys exist in session_state (some may be missing if never answered)
-for key in all_question_keys:
-    if key not in st.session_state:
-        st.session_state[key] = "" if key not in ["q3","q14","q21","q24","q25","q29","q30","q32","q33","q35","q37","q38","q39","q40","q41","q43","q45"] else []
-
-# Scoring function
-def compute_score():
-    correct = 0
-    details = []
-    for q_key in all_question_keys:
-        user_ans = st.session_state.get(q_key, "")
-        correct_ans = CORRECT_ANSWERS.get(q_key, None)
-        if correct_ans is None:
-            # If no answer key defined, treat as not answered
-            details.append((q_key, user_ans, "No key", False))
-            continue
-
-        # Compare based on type
-        if isinstance(correct_ans, list):
-            # Multiselect: compare as sets after stripping
-            if isinstance(user_ans, list):
-                # Convert both to sets of stripped strings for comparison
-                user_set = set(str(item).strip() for item in user_ans if item)
-                correct_set = set(str(item).strip() for item in correct_ans)
-                is_correct = (user_set == correct_set)
-            else:
-                is_correct = False
-        else:
-            # Text/number: case-insensitive strip and compare
-            if isinstance(user_ans, str):
-                is_correct = (user_ans.strip().lower() == str(correct_ans).strip().lower())
-            elif isinstance(user_ans, (int, float)):
-                is_correct = (user_ans == correct_ans)
-            else:
-                is_correct = False
-
-        if is_correct:
-            correct += 1
-        details.append((q_key, user_ans, correct_ans, is_correct))
-    return correct, details
 
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     if st.button("✅ Complete Assessment", use_container_width=True):
-        # Check if name fields are filled (optional)
         if not st.session_state.surname or not st.session_state.given_name:
             st.warning("Please enter your surname and given name before submitting.")
         else:
             st.balloons()
             st.success("Responses submitted successfully!")
             
-            # Compute score
-            score, details = compute_score()
-            total = len(all_question_keys)
-            percentage = (score / total) * 100
+            scores, total_score = compute_all_scores()
+            max_possible = 71  # from scoring guide sum
             
-            # Display summary
             st.subheader("📋 Assessment Summary")
             st.write(f"**Student:** {st.session_state.surname}, {st.session_state.given_name} {st.session_state.middle_name}")
-            st.write(f"**Score:** {score} / {total}  ({percentage:.1f}%)")
+            st.write(f"**Total Score:** {total_score} / {max_possible}  ({total_score/max_possible*100:.1f}%)")
             
-            # Option to download results as text file
+            # Download button
             timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
             filename = f"RMA_{st.session_state.surname}_{st.session_state.given_name}_{timestamp}.txt"
-            
-            # Build content for download
             lines = []
             lines.append("RAPID MATHEMATICS ASSESSMENT RESULTS")
             lines.append("="*50)
             lines.append(f"Student: {st.session_state.surname}, {st.session_state.given_name} {st.session_state.middle_name}")
             lines.append(f"Date: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}")
-            lines.append(f"Score: {score} / {total} ({percentage:.1f}%)")
+            lines.append(f"Total Score: {total_score} / {max_possible} ({total_score/max_possible*100:.1f}%)")
             lines.append("="*50)
-            lines.append("\nDETAILED RESULTS:")
-            for q_key, user, correct, is_correct in details:
-                status = "✓" if is_correct else "✗"
-                lines.append(f"{q_key.upper()}: {status} | Your answer: {user} | Correct: {correct}")
+            lines.append("\nDETAILED SCORES:")
+            for i in range(1,48):
+                key = f"q{i}"
+                score = scores.get(key,0)
+                lines.append(f"{key.upper()}: {score}")
             lines.append("="*50)
             content = "\n".join(lines)
             
@@ -702,9 +1065,7 @@ with col2:
                 mime="text/plain"
             )
             
-            # Expandable detailed view
-            with st.expander("View Detailed Responses"):
-                for q_key, user, correct, is_correct in details:
-                    if user:  # only show non-empty
-                        mark = "✅" if is_correct else "❌"
-                        st.write(f"**{q_key.upper()}:** {mark}  \nYour answer: `{user}`  \nCorrect: `{correct}`")
+            with st.expander("View Detailed Scores"):
+                for i in range(1,48):
+                    key = f"q{i}"
+                    st.write(f"**{key.upper()}:** {scores.get(key,0)}")

@@ -403,13 +403,14 @@ with tabs[3]:
         st.markdown("### Figure 6: Triangle PQR")
         display_figure(6, "Triangle PQR", "figure_6.png")
     
-    st.markdown("38. In Figure 6, if the measure of angle P is 30 degrees (that is, $p = 30$), which of the following are possible values for $q$ and $r$? **Choose 2 that are correct** among the choices. Note that the triangle is not drawn to scale.")
+    st.markdown("38. In Figure 6, if the measure of angle P is 30 degrees (that is, p = 30), which of the following are possible values for q and r? **Choose 2 that are correct** among the choices. Note that the triangle is not drawn to scale.")
+    # Removed dollar signs from options
     st.multiselect("Options for Item 38:", [
-        "a. $q = 10$ and $r = 140$",
-        "b. $q = 10$ and $r = 130$",
-        "c. $q = 110$ and $r = 30$",
-        "d. $q = 100$ and $r = 80$",
-        "e. $q = 100$ and $r = 50$"
+        "a. q = 10 and r = 140",
+        "b. q = 10 and r = 130",
+        "c. q = 110 and r = 30",
+        "d. q = 100 and r = 80",
+        "e. q = 100 and r = 50"
     ], key="q38", max_selections=2)
     
     st.markdown("39. In Figure 6, if the measure of angle R is 60 degrees (that is, $r = 60$) and the measure of the exterior angle at Q is 130, what is true about the values of p and q? **Choose at least one true statement** about p and q. NOTE: The exterior angle of a triangle forms a 180-degree angle with the adjacent interior angle.")

@@ -477,12 +477,26 @@ with tabs[3]:
     st.text_area("Solution for Item 44:", key="q44")
     
     st.markdown("45. The park management decides to divide the pool into two equal parts. One part will be designated for adults and has a depth of 1.5 meters, while the other part will be designated for children and has a depth of 0.6 meters. Which of the following will give the total volume of water in the pool? [Refer to Figure 9] **(Select all that apply)**")
-    st.multiselect("Options for Item 45:", [
-        "a. $10\\pi (2.1)$ cubic meters",
-        "b. $25\\pi (2.1)$ cubic meters",
-        "c. $\\frac{10\\pi(2.1)}{2}$ cubic meters",
-        "d. $\\frac{25\\pi(2.1)}{2}$ cubic meters",
-        "e. $\\frac{100\\pi(2.1)}{2}$ cubic meters"
+    
+    # Professional formatting with LaTeX for Item 45
+    st.markdown("""
+    <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+        <ul style="list-style-type: none; padding-left: 0;">
+            <li style="margin-bottom: 10px;">a. \( 10\pi(2.1) \) cubic meters</li>
+            <li style="margin-bottom: 10px;">b. \( 25\pi(2.1) \) cubic meters</li>
+            <li style="margin-bottom: 10px;">c. \( \frac{10\pi(2.1)}{2} \) cubic meters</li>
+            <li style="margin-bottom: 10px;">d. \( \frac{25\pi(2.1)}{2} \) cubic meters</li>
+            <li style="margin-bottom: 10px;">e. \( \frac{100\pi(2.1)}{2} \) cubic meters</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.multiselect("Select your answer(s):", [
+        "a. 10π(2.1) cubic meters",
+        "b. 25π(2.1) cubic meters",
+        "c. (10π(2.1))/2 cubic meters",
+        "d. (25π(2.1))/2 cubic meters",
+        "e. (100π(2.1))/2 cubic meters"
     ], key="q45")
     
     st.divider()
